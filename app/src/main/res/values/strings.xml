@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Gallery</string>
     <string name="gallery_name">Галерея</string>
+    <string name="open_image">Open image</string>
 </resources>
