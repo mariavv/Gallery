@@ -5,17 +5,20 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageButton;
 
 import com.maria.gallery.R;
-import com.maria.gallery.mvp.ImagesRow;
+import com.maria.gallery.mvp.model.ImagesRow;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ImagesRowAdapter extends RecyclerView.Adapter<ImagesRowAdapter.ViewHolder> {
 
-    private List<ImagesRow> items;
+    private List<ImagesRow> items = new ArrayList<>();
+
+    private OnItemClickListener onItemClickListener;
 
     @NonNull
     @Override
@@ -40,10 +43,9 @@ public class ImagesRowAdapter extends RecyclerView.Adapter<ImagesRowAdapter.View
         if (items == null) {
             items = new ArrayList<>();
         }
-
         items.add(entity);
 
-        notifyDataSetChanged();
+        notifyItemInserted(items.size() - 1);
     }
 
     public void updateItems(List<ImagesRow> items) {
@@ -56,21 +58,39 @@ public class ImagesRowAdapter extends RecyclerView.Adapter<ImagesRowAdapter.View
         notifyDataSetChanged();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public void setOnItemClickListener (OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick();
+    }
+
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         ImageButton img1;
         ImageButton img2;
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
 
             img1 = itemView.findViewById(R.id.leftImg);
             img2 = itemView.findViewById(R.id.rightImg);
+
+            itemView.setOnClickListener(this);
         }
 
-        public void bindData(final ImagesRow imagesRow) {
+        void bindData(final ImagesRow imagesRow) {
             img1.setImageResource(imagesRow.getPic1());
             img1.setImageResource(imagesRow.getPic2());
+        }
+
+        @Override
+        public void onClick(View v) {
+            int position = getAdapterPosition();
+            if (position != RecyclerView.NO_POSITION) {
+                onItemClickListener.onItemClick();
+            }
         }
     }
 }

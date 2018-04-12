@@ -3,16 +3,20 @@ package com.maria.gallery.ui;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.Toast;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.maria.gallery.R;
 import com.maria.gallery.adapter.ImagesRowAdapter;
-import com.maria.gallery.mvp.ImagesRow;
+import com.maria.gallery.mvp.model.Image;
+import com.maria.gallery.mvp.model.ImagesRow;
 import com.maria.gallery.mvp.present.GalleryPresenter;
 import com.maria.gallery.mvp.view.GalleryView;
 
-public class GalleryActivity extends MvpAppCompatActivity implements GalleryView {
+import java.util.List;
+
+public class GalleryActivity extends MvpAppCompatActivity implements GalleryView, ImagesRowAdapter.OnItemClickListener {
 
     @InjectPresenter
     GalleryPresenter presenter;
@@ -25,11 +29,15 @@ public class GalleryActivity extends MvpAppCompatActivity implements GalleryView
         super.onCreate(savedInstanceState);
 
         configureViews();
+
+        presenter.onCreateActivity();
     }
 
     private void configureViews() {
         recycler = findViewById(R.id.recycler);
         configureRecyclerView();
+
+        adapter.setOnItemClickListener(GalleryActivity.this);
     }
 
     private void configureRecyclerView() {
@@ -37,14 +45,26 @@ public class GalleryActivity extends MvpAppCompatActivity implements GalleryView
         recycler.setAdapter(adapter);
 
         recycler.setLayoutManager(new LinearLayoutManager(this));
+    }
 
-        adapter.addItem(new ImagesRow(R.drawable.ic_launcher_background, R.drawable.ic_launcher_foreground));
-        adapter.addItem(new ImagesRow(R.drawable.ic_launcher_foreground, R.drawable.ic_launcher_background));
-        adapter.addItem(new ImagesRow(R.drawable.ic_launcher_foreground, R.drawable.ic_launcher_foreground));
-        adapter.addItem(new ImagesRow(R.drawable.ic_launcher_background, R.drawable.ic_launcher_background));
-        adapter.addItem(new ImagesRow(R.drawable.ic_launcher_background, R.drawable.ic_launcher_foreground));
-        adapter.addItem(new ImagesRow(R.drawable.ic_launcher_foreground, R.drawable.ic_launcher_background));
-        adapter.addItem(new ImagesRow(R.drawable.ic_launcher_foreground, R.drawable.ic_launcher_foreground));
-        adapter.addItem(new ImagesRow(R.drawable.ic_launcher_background, R.drawable.ic_launcher_background));
+    @Override
+    public void fillFeed(List<Image> images) {
+        presenter.parseFeed(images);
+    }
+
+    @Override
+    public void errorGetFeed(Throwable throwable) {
+        Toast.makeText(this, throwable.getMessage(), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onRowsSet(List<ImagesRow> imageRows) {
+        adapter.addItem(imageRows.get(1));
+    }
+
+    @Override
+    public void onItemClick() {
+        //Intent intent = piActivity.createStartIntent(getContext(), piId);
+        //startActivity(intent);
     }
 }

@@ -1,4 +1,4 @@
-package com.maria.gallery.mvp;
+package com.maria.gallery.mvp.model;
 
 public class ImagesRow {
     int pic1;
