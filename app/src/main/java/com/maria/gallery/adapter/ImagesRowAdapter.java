@@ -44,7 +44,6 @@ public class ImagesRowAdapter extends RecyclerView.Adapter<ImagesRowAdapter.View
             items = new ArrayList<>();
         }
         items.add(entity);
-
         notifyItemInserted(items.size() - 1);
     }
 
@@ -52,9 +51,7 @@ public class ImagesRowAdapter extends RecyclerView.Adapter<ImagesRowAdapter.View
         if (items == null) {
             return;
         }
-
         this.items = items;
-
         notifyDataSetChanged();
     }
 
@@ -68,8 +65,7 @@ public class ImagesRowAdapter extends RecyclerView.Adapter<ImagesRowAdapter.View
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        ImageButton img1;
-        ImageButton img2;
+        ImageButton img1, img2;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -82,7 +78,7 @@ public class ImagesRowAdapter extends RecyclerView.Adapter<ImagesRowAdapter.View
 
         void bindData(final ImagesRow imagesRow) {
             img1.setImageResource(imagesRow.getPic1());
-            img1.setImageResource(imagesRow.getPic2());
+            img2.setImageResource(imagesRow.getPic2());
         }
 
         @Override

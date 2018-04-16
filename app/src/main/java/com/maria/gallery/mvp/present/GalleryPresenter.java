@@ -33,12 +33,17 @@ public class GalleryPresenter extends MvpPresenter<GalleryView> {
     }
 
     public void parseFeed(List<Image> images) {
-        ImagesRow row = new ImagesRow(images.get(1).getPic(), images.get(2).getPic());
         List<ImagesRow> imageRows = new ArrayList<>();
 
-        imageRows.add(row);
-        imageRows.add(row);
-        imageRows.add(row);
+        int i = 0;
+        while (i < images.size() - 1) {
+            ImagesRow row = new ImagesRow(images.get(i++).getPic(), images.get(i++).getPic());
+            imageRows.add(row);
+        }
+        if (images.size() % 2 == 1) {
+            ImagesRow row = new ImagesRow(images.get(i).getPic(), 0);
+            imageRows.add(row);
+        }
 
         getViewState().onRowsSet(imageRows);
     }

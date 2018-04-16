@@ -15,17 +15,17 @@ public class FeedRepo implements ImageProvider.Listener {
                     List<Image> images = new ArrayList<>();
 
                     images.add(new Image(R.drawable.ic_launcher_background));
-                    images.add(new Image(R.drawable.ic_launcher_foreground));
+                    images.add(new Image(R.mipmap.ic_launcher));
                     images.add(new Image(R.drawable.ic_launcher_background));
-                    images.add(new Image(R.drawable.ic_launcher_foreground));
+                    images.add(new Image(R.mipmap.ic_launcher));
                     images.add(new Image(R.drawable.ic_launcher_background));
-                    images.add(new Image(R.drawable.ic_launcher_foreground));
+                    images.add(new Image(R.mipmap.ic_launcher));
                     images.add(new Image(R.drawable.ic_launcher_background));
-                    images.add(new Image(R.drawable.ic_launcher_foreground));
+                    images.add(new Image(R.mipmap.ic_launcher));
                     images.add(new Image(R.drawable.ic_launcher_background));
-                    images.add(new Image(R.drawable.ic_launcher_foreground));
+                    images.add(new Image(R.mipmap.ic_launcher));
                     images.add(new Image(R.drawable.ic_launcher_background));
-                    images.add(new Image(R.drawable.ic_launcher_foreground));
+                    //images.add(new Image(R.mipmap.ic_launcher));
 
                     return Observable.just(images);
                 }

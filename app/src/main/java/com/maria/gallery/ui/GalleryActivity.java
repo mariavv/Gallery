@@ -27,6 +27,7 @@ public class GalleryActivity extends MvpAppCompatActivity implements GalleryView
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_gallery);
 
         configureViews();
 
@@ -59,7 +60,9 @@ public class GalleryActivity extends MvpAppCompatActivity implements GalleryView
 
     @Override
     public void onRowsSet(List<ImagesRow> imageRows) {
-        adapter.addItem(imageRows.get(1));
+        for (ImagesRow row : imageRows) {
+            adapter.addItem(row);
+        }
     }
 
     @Override
