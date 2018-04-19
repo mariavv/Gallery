@@ -1,5 +1,7 @@
 package com.maria.gallery.ui;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -30,6 +32,9 @@ public class GalleryActivity extends MvpAppCompatActivity implements GalleryView
         setContentView(R.layout.activity_gallery);
 
         configureViews();
+
+        String url = "https://oauth.yandex.ru/authorize?response_type=token&client_id=0fe587d1d6384c90a70b4da10b53a163";
+        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
 
         presenter.onCreateActivity();
     }

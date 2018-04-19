@@ -2,8 +2,6 @@ package com.maria.gallery.mvp.present;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
-import com.maria.gallery.R;
-import com.maria.gallery.manager.ImageProvider;
 import com.maria.gallery.mvp.model.FeedRepo;
 import com.maria.gallery.mvp.model.Image;
 import com.maria.gallery.mvp.model.ImagesRow;
@@ -25,7 +23,8 @@ public class GalleryPresenter extends MvpPresenter<GalleryView> {
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(images -> {
-                            getViewState().fillFeed(images);
+                            //getViewState().fillFeed(images);
+
                         }, throwable -> {
                             getViewState().errorGetFeed(throwable);
                         }
