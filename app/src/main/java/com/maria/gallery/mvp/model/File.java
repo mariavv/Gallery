@@ -20,7 +20,37 @@ public class File {
     @SerializedName("preview")
     private String previewDownloadLink;
 
+    @NonNull
+    public String getId() {
+        return id;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public long getSize() {
+        return size;
+    }
+
+    public String getPreviewDownloadLink() {
+        return previewDownloadLink;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getFileDownloadLink() {
+        return fileDownloadLink;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
     @SerializedName("name")
+
     private String name;
 
     @SerializedName("file")
@@ -28,4 +58,14 @@ public class File {
 
     @SerializedName("created")
     private String date;
+
+    public File(@NonNull String id, String path, long size, String previewDownloadLink, String name, String fileDownloadLink, String date) {
+        this.id = id;
+        this.path = path;
+        this.size = size;
+        this.previewDownloadLink = previewDownloadLink;
+        this.name = name;
+        this.fileDownloadLink = fileDownloadLink;
+        this.date = date;
+    }
 }

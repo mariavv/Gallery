@@ -24,7 +24,7 @@ public class GalleryPresenter extends MvpPresenter<GalleryView> {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(images -> {
                             //getViewState().fillFeed(images);
-
+                            String s = images.get(0).getFileDownloadLink();
                         }, throwable -> {
                             getViewState().errorGetFeed(throwable);
                         }
