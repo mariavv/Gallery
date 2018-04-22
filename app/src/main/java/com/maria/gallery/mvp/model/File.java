@@ -20,6 +20,15 @@ public class File {
     @SerializedName("preview")
     private String previewDownloadLink;
 
+    @SerializedName("name")
+    private String name;
+
+    @SerializedName("file")
+    private String fileDownloadLink;
+
+    @SerializedName("created")
+    private String date;
+
     @NonNull
     public String getId() {
         return id;
@@ -48,16 +57,6 @@ public class File {
     public String getDate() {
         return date;
     }
-
-    @SerializedName("name")
-
-    private String name;
-
-    @SerializedName("file")
-    private String fileDownloadLink;
-
-    @SerializedName("created")
-    private String date;
 
     public File(@NonNull String id, String path, long size, String previewDownloadLink, String name, String fileDownloadLink, String date) {
         this.id = id;

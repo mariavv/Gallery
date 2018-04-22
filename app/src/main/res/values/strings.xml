@@ -2,6 +2,7 @@
     <string name="app_name">Gallery</string>
     <string name="gallery_name">Галерея</string>
     <string name="open_image">Open image</string>
+    <string name="token"></string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
