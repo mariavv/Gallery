@@ -2,7 +2,6 @@ package com.maria.gallery.adapter;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -10,21 +9,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 
 import com.maria.gallery.R;
-import com.maria.gallery.mvp.model.ImagesRow2;
+import com.maria.gallery.mvp.model.ImagesRow;
 
-import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ImagesRowAdapter extends RecyclerView.Adapter<ImagesRowAdapter.ViewHolder> {
 
-    private List<ImagesRow2> items = new ArrayList<>();
+    private List<ImagesRow> items = new ArrayList<>();
 
     private OnItemClickListener onItemClickListener;
 
@@ -47,7 +42,7 @@ public class ImagesRowAdapter extends RecyclerView.Adapter<ImagesRowAdapter.View
         return items.size();
     }
 
-    public void addItem(ImagesRow2 entity) {
+    public void addItem(ImagesRow entity) {
         if (items == null) {
             items = new ArrayList<>();
         }
@@ -55,13 +50,13 @@ public class ImagesRowAdapter extends RecyclerView.Adapter<ImagesRowAdapter.View
         notifyItemInserted(items.size() - 1);
     }
 
-    public void updateItems(List<ImagesRow2> items) {
+    /*public void updateItems(List<ImagesRow> items) {
         if (items == null) {
             return;
         }
         this.items = items;
         notifyDataSetChanged();
-    }
+    }*/
 
     public void setOnItemClickListener (OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
@@ -84,46 +79,17 @@ public class ImagesRowAdapter extends RecyclerView.Adapter<ImagesRowAdapter.View
             itemView.setOnClickListener(this);
         }
 
-        void bindData(final ImagesRow2 imagesRow) {
-
-            /*URL newurl = null;
-            try {
-                newurl = new URL(imagesRow.getPic1().getFileDownloadLink());
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
-            try {
-                img1.setImageBitmap(BitmapFactory.decodeStream(newurl != null ? newurl.openConnection().getInputStream() : null));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            URL newurl2 = null;
-            try {
-                newurl2 = new URL(imagesRow.getPic2().getFileDownloadLink());
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
-            try {
-                img2.setImageBitmap(BitmapFactory.decodeStream(newurl2 != null ? newurl2.openConnection().getInputStream() : null));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }*/
-
+        void bindData(final ImagesRow imagesRow) {
             new DownloadImageTask(img1)
                     .execute(imagesRow.getPic1().getFileDownloadLink());
             new DownloadImageTask(img2)
                     .execute(imagesRow.getPic2().getFileDownloadLink());
-
-            //img1.setImageURI(Uri.parse(imagesRow.getPic1().getFileDownloadLink()));
-            //img2.setImageURI(Uri.parse(imagesRow.getPic2().getFileDownloadLink()));
-            //img2.setImageResource(imagesRow.getPic2());
         }
 
-        private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-            ImageButton bmImage;
+        class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+            private ImageButton bmImage;
 
-            public DownloadImageTask(ImageButton bmImage) {
+            DownloadImageTask(ImageButton bmImage) {
                 this.bmImage = bmImage;
             }
 
@@ -134,7 +100,6 @@ public class ImagesRowAdapter extends RecyclerView.Adapter<ImagesRowAdapter.View
                     InputStream in = new java.net.URL(urldisplay).openStream();
                     mIcon11 = BitmapFactory.decodeStream(in);
                 } catch (Exception e) {
-                    //Log.e("Ошибка передачи изображения", e.getMessage());
                     e.printStackTrace();
                 }
                 return mIcon11;

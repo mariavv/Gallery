@@ -2,13 +2,10 @@ package com.maria.gallery.ui;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
@@ -16,28 +13,29 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.maria.gallery.R;
 import com.maria.gallery.adapter.ImagesRowAdapter;
 import com.maria.gallery.mvp.model.File;
-import com.maria.gallery.mvp.model.Image;
 import com.maria.gallery.mvp.model.ImagesRow;
-import com.maria.gallery.mvp.model.ImagesRow2;
 import com.maria.gallery.mvp.present.GalleryPresenter;
 import com.maria.gallery.mvp.view.GalleryView;
+import com.yandex.authsdk.YandexAuthException;
+import com.yandex.authsdk.YandexAuthOptions;
+import com.yandex.authsdk.YandexAuthSdk;
 import com.yandex.authsdk.YandexAuthToken;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.List;
 
 public class GalleryActivity extends MvpAppCompatActivity implements GalleryView, ImagesRowAdapter.OnItemClickListener {
 
-    private static final int REQUEST_AUTH = 1;
-    public static final String TOKEN = "token";
+    private static final int REQUEST_LOGIN_SDK = 2;
+
+    public static final String TOKEN = "TOKEN";
 
     @InjectPresenter
     GalleryPresenter presenter;
 
     RecyclerView recycler;
     ImagesRowAdapter adapter;
+
+    private YandexAuthSdk sdk;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,15 +44,11 @@ public class GalleryActivity extends MvpAppCompatActivity implements GalleryView
 
         configureViews();
 
-        //String url = "https://oauth.yandex.ru/authorize?response_type=token&client_id=0fe587d1d6384c90a70b4da10b53a163";
-        //startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
-
-        //startActivityForResult(AuthActivity.start(this), REQUEST_AUTH);
-
         //SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         //String token = preferences.getString(TOKEN, null);
         //if (token == null) {
-            //startActivityForResult(AuthActivity.start(this), REQUEST_AUTH);
+            //sdk = new YandexAuthSdk(new YandexAuthOptions(this, true));
+            //startActivityForResult(sdk.createLoginIntent(this, null), REQUEST_LOGIN_SDK);
         //}
 
         presenter.onCreateActivity();
@@ -81,36 +75,43 @@ public class GalleryActivity extends MvpAppCompatActivity implements GalleryView
         if (resultCode != RESULT_OK) {
             return;
         }
-        switch (requestCode) {
-            case REQUEST_AUTH:
-
-                return;
+        if (requestCode == REQUEST_LOGIN_SDK) {
+            try {
+                final YandexAuthToken yandexAuthToken = sdk.extractToken(resultCode, data);
+                if (yandexAuthToken != null) {
+                    saveToken(yandexAuthToken.getValue());
+                }
+            } catch (YandexAuthException e) {
+                showMessage(e.getLocalizedMessage());
+            }
         }
+    }
+
+    private void showMessage(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    private void saveToken(String token) {
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
+        editor.putString(TOKEN, token);
+        editor.apply();
     }
 
     @Override
     public void fillFeed(List<File> images) {
-        //presenter.parseFeed(images);
-        presenter.parse(images);
+        presenter.parseFeed(images);
     }
 
     @Override
-    public void onRowsSet2(List<ImagesRow2> imageRows) {
-        for (ImagesRow2 row : imageRows) {
+    public void onRowsSet2(List<ImagesRow> imageRows) {
+        for (ImagesRow row : imageRows) {
             adapter.addItem(row);
         }
     }
 
     @Override
     public void errorGetFeed(Throwable throwable) {
-        Toast.makeText(this, throwable.getMessage(), Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onRowsSet(List<ImagesRow> imageRows) {
-        for (ImagesRow row : imageRows) {
-            //adapter.addItem(row);
-        }
+        showMessage(throwable.getMessage());
     }
 
     @Override

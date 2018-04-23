@@ -8,7 +8,7 @@ import retrofit2.http.Headers;
 
 public interface RestService {
 
-    String AUTH_TOKEN = "";
+    String AUTH_TOKEN = com.maria.gallery.Dbg.token;
     String API_URL = "https://cloud-api.yandex.net:443/v1/disk/";
 
     @Headers("Authorization: OAuth " + AUTH_TOKEN)

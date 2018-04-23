@@ -4,9 +4,7 @@ import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.maria.gallery.mvp.model.FeedRepo;
 import com.maria.gallery.mvp.model.File;
-import com.maria.gallery.mvp.model.Image;
 import com.maria.gallery.mvp.model.ImagesRow;
-import com.maria.gallery.mvp.model.ImagesRow2;
 import com.maria.gallery.mvp.view.GalleryView;
 
 import java.util.ArrayList;
@@ -34,32 +32,16 @@ public class GalleryPresenter extends MvpPresenter<GalleryView> {
                 );
     }
 
-    public void parseFeed(List<Image> images) {
+    public void parseFeed(List<File> images) {
         List<ImagesRow> imageRows = new ArrayList<>();
 
         int i = 0;
         while (i < images.size() - 1) {
-            ImagesRow row = new ImagesRow(images.get(i++).getPic(), images.get(i++).getPic());
+            ImagesRow row = new ImagesRow(images.get(i++), images.get(i++));
             imageRows.add(row);
         }
         if (images.size() % 2 == 1) {
-            ImagesRow row = new ImagesRow(images.get(i).getPic(), 0);
-            imageRows.add(row);
-        }
-
-        getViewState().onRowsSet(imageRows);
-    }
-
-    public void parse(List<File> images) {
-        List<ImagesRow2> imageRows = new ArrayList<>();
-
-        int i = 0;
-        while (i < images.size() - 1) {
-            ImagesRow2 row = new ImagesRow2(images.get(i++), images.get(i++));
-            imageRows.add(row);
-        }
-        if (images.size() % 2 == 1) {
-            ImagesRow2 row = new ImagesRow2(images.get(i), null);
+            ImagesRow row = new ImagesRow(images.get(i), null);
             imageRows.add(row);
         }
 
