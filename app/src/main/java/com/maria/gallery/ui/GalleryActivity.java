@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
+import com.maria.gallery.Dbg;
 import com.maria.gallery.R;
 import com.maria.gallery.adapter.ImagesRowAdapter;
 import com.maria.gallery.mvp.model.data.File;
@@ -17,6 +18,7 @@ import com.maria.gallery.mvp.model.data.ImagesRow;
 import com.maria.gallery.mvp.present.GalleryPresenter;
 import com.maria.gallery.mvp.view.GalleryView;
 import com.yandex.authsdk.YandexAuthException;
+import com.yandex.authsdk.YandexAuthOptions;
 import com.yandex.authsdk.YandexAuthSdk;
 import com.yandex.authsdk.YandexAuthToken;
 
@@ -43,12 +45,14 @@ public class GalleryActivity extends MvpAppCompatActivity implements GalleryView
 
         configureViews();
 
-        //SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        //String token = preferences.getString(TOKEN, null);
-        //if (token == null) {
-            //sdk = new YandexAuthSdk(new YandexAuthOptions(this, true));
-            //startActivityForResult(sdk.createLoginIntent(this, null), REQUEST_LOGIN_SDK);
-        //}
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String token = preferences.getString(TOKEN, null);
+        if (token == null) {
+            sdk = new YandexAuthSdk(new YandexAuthOptions(this, true));
+            startActivityForResult(sdk.createLoginIntent(this, null), REQUEST_LOGIN_SDK);
+        } else {
+            //com.maria.gallery.Dbg.token = token;
+        }
 
         presenter.onCreateActivity();
     }

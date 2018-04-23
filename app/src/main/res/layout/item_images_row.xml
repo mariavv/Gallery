@@ -8,17 +8,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageButton
+        <ImageView
             android:id="@+id/leftImg"
-            android:layout_width="180dp"
+            android:layout_width="190dp"
             android:layout_height="150dp"
 
             android:contentDescription="@string/open_image"
             tools:src="@drawable/ic_launcher_background" />
 
-        <ImageButton
+        <ImageView
             android:id="@+id/rightImg"
-            android:layout_width="180dp"
+            android:layout_width="190dp"
             android:layout_height="150dp"
 
             android:contentDescription="@string/open_image"

@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import com.maria.gallery.R;
 import com.maria.gallery.mvp.model.data.ImagesRow;
@@ -68,7 +69,7 @@ public class ImagesRowAdapter extends RecyclerView.Adapter<ImagesRowAdapter.View
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        ImageButton img1, img2;
+        ImageView img1, img2;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -89,9 +90,9 @@ public class ImagesRowAdapter extends RecyclerView.Adapter<ImagesRowAdapter.View
         }
 
         class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-            private ImageButton bmImage;
+            private ImageView bmImage;
 
-            DownloadImageTask(ImageButton bmImage) {
+            DownloadImageTask(ImageView bmImage) {
                 this.bmImage = bmImage;
             }
 
