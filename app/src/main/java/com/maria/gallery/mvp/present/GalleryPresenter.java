@@ -25,8 +25,7 @@ public class GalleryPresenter extends MvpPresenter<GalleryView> {
         feedRepo.getFeed()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(getViewState()::fillFeed, getViewState()::errorGetFeed
-                );
+                .subscribe(getViewState()::fillFeed, getViewState()::errorGetFeed);
     }
 
     public void parseFeed(List<File> images) {

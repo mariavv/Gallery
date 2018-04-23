@@ -63,7 +63,7 @@ public class ImagesRowAdapter extends RecyclerView.Adapter<ImagesRowAdapter.View
     }
 
     public interface OnItemClickListener {
-        void onItemClick();
+        void onItemClick(String fileDownloadLink);
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -77,6 +77,8 @@ public class ImagesRowAdapter extends RecyclerView.Adapter<ImagesRowAdapter.View
             img2 = itemView.findViewById(R.id.rightImg);
 
             itemView.setOnClickListener(this);
+            img1.setOnClickListener(this);
+            img2.setOnClickListener(this);
         }
 
         void bindData(final ImagesRow imagesRow) {
@@ -114,7 +116,14 @@ public class ImagesRowAdapter extends RecyclerView.Adapter<ImagesRowAdapter.View
         public void onClick(View v) {
             int position = getAdapterPosition();
             if (position != RecyclerView.NO_POSITION) {
-                onItemClickListener.onItemClick();
+                switch (v.getId()) {
+                    case R.id.leftImg:
+                        onItemClickListener.onItemClick(items.get(position).getPic1().getFileDownloadLink());
+                        break;
+                    case R.id.rightImg:
+                        onItemClickListener.onItemClick(items.get(position).getPic2().getFileDownloadLink());
+                        break;
+                }
             }
         }
     }

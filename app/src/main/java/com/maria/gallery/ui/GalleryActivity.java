@@ -114,8 +114,8 @@ public class GalleryActivity extends MvpAppCompatActivity implements GalleryView
     }
 
     @Override
-    public void onItemClick() {
-        //Intent intent = piActivity.createStartIntent(getContext(), piId);
-        //startActivity(intent);
+    public void onItemClick(String fileDownloadLink) {
+        Intent intent = ViewImageActivity.createStartIntent(this, fileDownloadLink);
+        startActivity(intent);
     }
 }
