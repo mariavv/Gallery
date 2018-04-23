@@ -12,12 +12,11 @@ import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.maria.gallery.R;
 import com.maria.gallery.adapter.ImagesRowAdapter;
-import com.maria.gallery.mvp.model.File;
-import com.maria.gallery.mvp.model.ImagesRow;
+import com.maria.gallery.mvp.model.data.File;
+import com.maria.gallery.mvp.model.data.ImagesRow;
 import com.maria.gallery.mvp.present.GalleryPresenter;
 import com.maria.gallery.mvp.view.GalleryView;
 import com.yandex.authsdk.YandexAuthException;
-import com.yandex.authsdk.YandexAuthOptions;
 import com.yandex.authsdk.YandexAuthSdk;
 import com.yandex.authsdk.YandexAuthToken;
 
@@ -103,7 +102,7 @@ public class GalleryActivity extends MvpAppCompatActivity implements GalleryView
     }
 
     @Override
-    public void onRowsSet2(List<ImagesRow> imageRows) {
+    public void onRowsSet(List<ImagesRow> imageRows) {
         for (ImagesRow row : imageRows) {
             adapter.addItem(row);
         }

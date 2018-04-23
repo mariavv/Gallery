@@ -1,5 +1,7 @@
 package com.maria.gallery.mvp.model;
 
+import com.maria.gallery.mvp.model.data.File;
+
 import java.util.List;
 
 import io.reactivex.Observable;

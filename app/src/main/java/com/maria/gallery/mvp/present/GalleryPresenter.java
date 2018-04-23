@@ -1,10 +1,12 @@
 package com.maria.gallery.mvp.present;
 
+import android.annotation.SuppressLint;
+
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.maria.gallery.mvp.model.FeedRepo;
-import com.maria.gallery.mvp.model.File;
-import com.maria.gallery.mvp.model.ImagesRow;
+import com.maria.gallery.mvp.model.data.File;
+import com.maria.gallery.mvp.model.data.ImagesRow;
 import com.maria.gallery.mvp.view.GalleryView;
 
 import java.util.ArrayList;
@@ -18,17 +20,12 @@ public class GalleryPresenter extends MvpPresenter<GalleryView> {
 
     private final FeedRepo feedRepo = new FeedRepo();
 
+    @SuppressLint("CheckResult")
     public void onCreateActivity() {
         feedRepo.getFeed()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(images -> {
-                            //getViewState().fillFeed(images);
-                            getViewState().fillFeed(images);
-                            //String s = images.get(0).getFileDownloadLink();
-                        }, throwable -> {
-                            getViewState().errorGetFeed(throwable);
-                        }
+                .subscribe(getViewState()::fillFeed, getViewState()::errorGetFeed
                 );
     }
 
@@ -45,6 +42,6 @@ public class GalleryPresenter extends MvpPresenter<GalleryView> {
             imageRows.add(row);
         }
 
-        getViewState().onRowsSet2(imageRows);
+        getViewState().onRowsSet(imageRows);
     }
 }

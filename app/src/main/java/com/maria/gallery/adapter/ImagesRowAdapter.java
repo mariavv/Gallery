@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 import com.maria.gallery.R;
-import com.maria.gallery.mvp.model.ImagesRow;
+import com.maria.gallery.mvp.model.data.ImagesRow;
 
 import java.io.InputStream;
 import java.util.ArrayList;
