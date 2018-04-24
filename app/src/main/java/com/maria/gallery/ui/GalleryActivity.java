@@ -10,13 +10,13 @@ import android.widget.Toast;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
-import com.maria.gallery.Dbg;
 import com.maria.gallery.R;
 import com.maria.gallery.adapter.ImagesRowAdapter;
 import com.maria.gallery.mvp.model.data.File;
 import com.maria.gallery.mvp.model.data.ImagesRow;
 import com.maria.gallery.mvp.present.GalleryPresenter;
 import com.maria.gallery.mvp.view.GalleryView;
+import com.maria.gallery.mvp.model.OAuth;
 import com.yandex.authsdk.YandexAuthException;
 import com.yandex.authsdk.YandexAuthOptions;
 import com.yandex.authsdk.YandexAuthSdk;
@@ -51,10 +51,8 @@ public class GalleryActivity extends MvpAppCompatActivity implements GalleryView
             sdk = new YandexAuthSdk(new YandexAuthOptions(this, true));
             startActivityForResult(sdk.createLoginIntent(this, null), REQUEST_LOGIN_SDK);
         } else {
-            //com.maria.gallery.Dbg.token = token;
+            onHaveToken(token);
         }
-
-        presenter.onCreateActivity();
     }
 
     private void configureViews() {
@@ -82,7 +80,10 @@ public class GalleryActivity extends MvpAppCompatActivity implements GalleryView
             try {
                 final YandexAuthToken yandexAuthToken = sdk.extractToken(resultCode, data);
                 if (yandexAuthToken != null) {
-                    saveToken(yandexAuthToken.getValue());
+                    String token = yandexAuthToken.getValue();
+                    saveToken(token);
+
+                    onHaveToken(token);
                 }
             } catch (YandexAuthException e) {
                 showMessage(e.getLocalizedMessage());
@@ -90,8 +91,13 @@ public class GalleryActivity extends MvpAppCompatActivity implements GalleryView
         }
     }
 
+    private void onHaveToken(String token) {
+        OAuth.token = token;
+        presenter.onCreateActivity();
+    }
+
     private void showMessage(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
     private void saveToken(String token) {
