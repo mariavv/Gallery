@@ -60,7 +60,7 @@ public class ImagesRowAdapter extends RecyclerView.Adapter<ImagesRowAdapter.View
         notifyDataSetChanged();
     }*/
 
-    public void setOnItemClickListener (OnItemClickListener onItemClickListener) {
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
     }
 
@@ -84,8 +84,16 @@ public class ImagesRowAdapter extends RecyclerView.Adapter<ImagesRowAdapter.View
         }
 
         void bindData(final ImagesRow imagesRow) {
-            Picasso.get().load(imagesRow.getPic1().getFileDownloadLink()).into(img1);
-            Picasso.get().load(imagesRow.getPic2().getFileDownloadLink()).into(img2);
+            Picasso.get()
+                    .load(imagesRow.getPic1().getFileDownloadLink())
+                    .resize(185, 155)
+                    .centerCrop()
+                    .into(img1);
+            Picasso.get().
+                    load(imagesRow.getPic2().getFileDownloadLink())
+                    .resize(185, 155)
+                    .centerCrop()
+                    .into(img2);
         }
 
         @Override
