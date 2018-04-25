@@ -7,6 +7,7 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;
+import retrofit2.http.Streaming;
 
 public interface RestService {
 
@@ -16,4 +17,8 @@ public interface RestService {
     //@Headers("Authorization: OAuth " + AUTH_TOKEN)
     @GET("resources/last-uploaded")
     Observable<BaseResponse<List<File>>> getFeed();
+
+    //@Streaming
+    //@GET
+    //Observable<Response<ResponseBody>> downloadFile(@Url String fileUrl);
 }

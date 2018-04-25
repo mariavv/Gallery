@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
@@ -25,6 +26,8 @@ import com.yandex.authsdk.YandexAuthToken;
 import java.util.List;
 
 public class GalleryActivity extends MvpAppCompatActivity implements GalleryView, ImagesRowAdapter.OnItemClickListener {
+
+    public static final String TAG = "tagg";
 
     private static final int REQUEST_LOGIN_SDK = 2;
 
@@ -47,7 +50,7 @@ public class GalleryActivity extends MvpAppCompatActivity implements GalleryView
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         String token = preferences.getString(TOKEN, null);
-        if (token == null) {
+        if ((token == null) || (token.length() == 0)) {
             sdk = new YandexAuthSdk(new YandexAuthOptions(this, true));
             startActivityForResult(sdk.createLoginIntent(this, null), REQUEST_LOGIN_SDK);
         } else {
@@ -97,6 +100,7 @@ public class GalleryActivity extends MvpAppCompatActivity implements GalleryView
     }
 
     private void showMessage(String message) {
+        Log.d(TAG, "showMessage:" + message);
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
@@ -120,6 +124,7 @@ public class GalleryActivity extends MvpAppCompatActivity implements GalleryView
 
     @Override
     public void errorGetFeed(Throwable throwable) {
+        Log.d(TAG, "errorGetFeed: " + throwable.getMessage());
         showMessage(throwable.getMessage());
     }
 

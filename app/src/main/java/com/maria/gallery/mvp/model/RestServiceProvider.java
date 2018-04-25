@@ -16,17 +16,13 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RestServiceProvider {
 
-    //public static String token = "";
-
     private static final RestServiceProvider INSTANCE = new RestServiceProvider();
     private RestService restService;
 
     private RestServiceProvider() {
-        //
     }
 
     public static RestServiceProvider newInstance() {
-        //
         return INSTANCE;
     }
 
@@ -38,6 +34,9 @@ public class RestServiceProvider {
     }
 
     private RestService createRestService() {
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+
         OkHttpClient client = new OkHttpClient.Builder().addInterceptor(new Interceptor() {
             @Override
             public Response intercept(@NonNull Chain chain) throws IOException {
@@ -52,7 +51,7 @@ public class RestServiceProvider {
 
                 return chain.proceed(request);
             }
-        }).build();
+        }).addInterceptor(logging).build();
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(RestService.API_URL)
@@ -66,7 +65,6 @@ public class RestServiceProvider {
     private OkHttpClient provideClient() {
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-
         return new OkHttpClient.Builder().addInterceptor(logging).build();
     }
 }

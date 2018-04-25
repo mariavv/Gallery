@@ -13,6 +13,7 @@ import android.widget.ImageView;
 
 import com.maria.gallery.R;
 import com.maria.gallery.mvp.model.data.ImagesRow;
+import com.squareup.picasso.Picasso;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -83,34 +84,8 @@ public class ImagesRowAdapter extends RecyclerView.Adapter<ImagesRowAdapter.View
         }
 
         void bindData(final ImagesRow imagesRow) {
-            new DownloadImageTask(img1)
-                    .execute(imagesRow.getPic1().getFileDownloadLink());
-            new DownloadImageTask(img2)
-                    .execute(imagesRow.getPic2().getFileDownloadLink());
-        }
-
-        class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-            private ImageView bmImage;
-
-            DownloadImageTask(ImageView bmImage) {
-                this.bmImage = bmImage;
-            }
-
-            protected Bitmap doInBackground(String... urls) {
-                String urldisplay = urls[0];
-                Bitmap mIcon11 = null;
-                try {
-                    InputStream in = new java.net.URL(urldisplay).openStream();
-                    mIcon11 = BitmapFactory.decodeStream(in);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                return mIcon11;
-            }
-
-            protected void onPostExecute(Bitmap result) {
-                bmImage.setImageBitmap(result);
-            }
+            Picasso.get().load(imagesRow.getPic1().getFileDownloadLink()).into(img1);
+            Picasso.get().load(imagesRow.getPic2().getFileDownloadLink()).into(img2);
         }
 
         @Override
