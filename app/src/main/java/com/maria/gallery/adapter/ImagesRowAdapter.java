@@ -1,21 +1,18 @@
 package com.maria.gallery.adapter;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.maria.gallery.R;
+import com.maria.gallery.mvp.model.data.File;
 import com.maria.gallery.mvp.model.data.ImagesRow;
 import com.squareup.picasso.Picasso;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +21,8 @@ public class ImagesRowAdapter extends RecyclerView.Adapter<ImagesRowAdapter.View
     private List<ImagesRow> items = new ArrayList<>();
 
     private OnItemClickListener onItemClickListener;
+
+    private int screenWidth;
 
     @NonNull
     @Override
@@ -64,51 +63,68 @@ public class ImagesRowAdapter extends RecyclerView.Adapter<ImagesRowAdapter.View
         this.onItemClickListener = onItemClickListener;
     }
 
+    public void configWidth(int screenWidth) {
+        this.screenWidth = screenWidth;
+    }
+
     public interface OnItemClickListener {
         void onItemClick(String fileDownloadLink);
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        ImageView img1, img2;
+        ImageView imgLeft, imgRight;
 
         ViewHolder(View itemView) {
             super(itemView);
 
-            img1 = itemView.findViewById(R.id.leftImg);
-            img2 = itemView.findViewById(R.id.rightImg);
+            imgLeft = itemView.findViewById(R.id.leftImg);
+            imgRight = itemView.findViewById(R.id.rightImg);
 
-            itemView.setOnClickListener(this);
-            img1.setOnClickListener(this);
-            img2.setOnClickListener(this);
+            setImgWidth(imgLeft);
+            setImgWidth(imgRight);
+
+            imgLeft.setOnClickListener(this);
+            imgRight.setOnClickListener(this);
+        }
+
+        private void setImgWidth(ImageView img) {
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) img.getLayoutParams();
+            params.width = screenWidth / 2;
+            img.requestLayout();
         }
 
         void bindData(final ImagesRow imagesRow) {
+            loadImage(imagesRow.getLeftPic(), imgLeft);
+            loadImage(imagesRow.getRightPic(), imgRight);
+        }
+
+        private void loadImage(File image, ImageView img) {
             Picasso.get()
-                    .load(imagesRow.getPic1().getFileDownloadLink())
-                    .resize(185, 155)
+                    .load(image.getFileDownloadLink())
+                    .resize(150, 150)
                     .centerCrop()
-                    .into(img1);
-            Picasso.get().
-                    load(imagesRow.getPic2().getFileDownloadLink())
-                    .resize(185, 155)
-                    .centerCrop()
-                    .into(img2);
+                    .into(img);
         }
 
         @Override
         public void onClick(View v) {
             int position = getAdapterPosition();
             if (position != RecyclerView.NO_POSITION) {
+                ImagesRow row = items.get(position);
                 switch (v.getId()) {
                     case R.id.leftImg:
-                        onItemClickListener.onItemClick(items.get(position).getPic1().getFileDownloadLink());
+                        itemClick(row.getLeftPic());
                         break;
                     case R.id.rightImg:
-                        onItemClickListener.onItemClick(items.get(position).getPic2().getFileDownloadLink());
+                        itemClick(row.getRightPic());
                         break;
                 }
             }
+        }
+
+        private void itemClick(File image) {
+            onItemClickListener.onItemClick(image.getFileDownloadLink());
         }
     }
 }

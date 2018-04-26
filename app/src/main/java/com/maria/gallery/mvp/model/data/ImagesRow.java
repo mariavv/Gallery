@@ -2,18 +2,18 @@ package com.maria.gallery.mvp.model.data;
 
 public class ImagesRow {
 
-    File pic1, pic2;
+    File leftPic, rightPic;
 
-    public ImagesRow(File pic1, File pic2) {
-        this.pic1 = pic1;
-        this.pic2 = pic2;
+    public ImagesRow(File leftPic, File rightPic) {
+        this.leftPic = leftPic;
+        this.rightPic = rightPic;
     }
 
-    public File getPic1() {
-        return pic1;
+    public File getLeftPic() {
+        return leftPic;
     }
 
-    public File getPic2() {
-        return pic2;
+    public File getRightPic() {
+        return rightPic;
     }
 }

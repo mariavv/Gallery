@@ -2,10 +2,15 @@ package com.maria.gallery.ui;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Display;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
@@ -56,11 +61,22 @@ public class GalleryActivity extends MvpAppCompatActivity
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
     private void configureViews() {
         recycler = findViewById(R.id.recycler);
         configureRecyclerView();
 
         adapter.setOnItemClickListener(GalleryActivity.this);
+
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        adapter.configWidth(size.x);
     }
 
     private void configureRecyclerView() {
@@ -90,6 +106,14 @@ public class GalleryActivity extends MvpAppCompatActivity
                 showMessage(e.getLocalizedMessage());
             }
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == 2131165253) {
+            presenter.onSync();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void onHaveToken(String token) {

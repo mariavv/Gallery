@@ -20,12 +20,8 @@ public class GalleryPresenter extends MvpPresenter<GalleryView> {
 
     private final FeedRepo feedRepo = new FeedRepo();
 
-    @SuppressLint("CheckResult")
     public void onCreateActivity() {
-        feedRepo.getFeed()
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(getViewState()::fillFeed, getViewState()::errorGetFeed);
+        loadFeed();
     }
 
     public void parseFeed(List<File> images) {
@@ -42,5 +38,17 @@ public class GalleryPresenter extends MvpPresenter<GalleryView> {
         }
 
         getViewState().onRowsSet(imageRows);
+    }
+
+    public void onSync() {
+        loadFeed();
+    }
+
+    @SuppressLint("CheckResult")
+    private void loadFeed() {
+        feedRepo.getFeed()
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(getViewState()::fillFeed, getViewState()::errorGetFeed);
     }
 }
