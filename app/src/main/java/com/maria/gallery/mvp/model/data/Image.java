@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.SerializedName;
 
-public class File /*implements Parcelable*/ {
+public class Image /*implements Parcelable*/ {
 
     @NonNull
     //@PrimaryKey
@@ -58,7 +58,7 @@ public class File /*implements Parcelable*/ {
         return date;
     }
 
-    public File(@NonNull String id, String path, long size, String previewDownloadLink, String name, String fileDownloadLink, String date) {
+    public Image(@NonNull String id, String path, long size, String previewDownloadLink, String name, String fileDownloadLink, String date) {
         this.id = id;
         this.path = path;
         this.size = size;

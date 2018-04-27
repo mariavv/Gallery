@@ -1,15 +1,15 @@
 package com.maria.gallery.mvp.view;
 
 import com.arellomobile.mvp.MvpView;
-import com.maria.gallery.mvp.model.data.File;
-import com.maria.gallery.mvp.model.data.ImagesRow;
+import com.maria.gallery.mvp.model.data.Image;
+import com.maria.gallery.mvp.model.data.ImagesPair;
 
 import java.util.List;
 
 public interface GalleryView extends MvpView {
     void errorGetFeed(Throwable throwable);
 
-    void fillFeed(List<File> images);
+    void fillFeed(List<Image> images);
 
-    void onRowsSet(List<ImagesRow> imageRows);
+    void onRowsSet(List<ImagesPair> imageRows);
 }

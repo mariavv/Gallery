@@ -1,5 +1,6 @@
 package com.maria.gallery.adapter;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,16 +10,26 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.maria.gallery.R;
-import com.maria.gallery.mvp.model.data.File;
-import com.maria.gallery.mvp.model.data.ImagesRow;
+import com.maria.gallery.mvp.model.OAuth;
+import com.maria.gallery.mvp.model.data.Image;
+import com.maria.gallery.mvp.model.data.ImagesPair;
+import com.squareup.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
 public class ImagesRowAdapter extends RecyclerView.Adapter<ImagesRowAdapter.ViewHolder> {
 
-    private List<ImagesRow> items = new ArrayList<>();
+    private Context context;
+
+    private List<ImagesPair> items = new ArrayList<>();
 
     private OnItemClickListener onItemClickListener;
 
@@ -27,7 +38,8 @@ public class ImagesRowAdapter extends RecyclerView.Adapter<ImagesRowAdapter.View
     @NonNull
     @Override
     public ImagesRowAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext())
+        context = parent.getContext();
+        View v = LayoutInflater.from(context)
                 .inflate(R.layout.item_images_row, parent, false);
 
         return new ViewHolder(v);
@@ -43,7 +55,7 @@ public class ImagesRowAdapter extends RecyclerView.Adapter<ImagesRowAdapter.View
         return items.size();
     }
 
-    public void addItem(ImagesRow entity) {
+    public void addItem(ImagesPair entity) {
         if (items == null) {
             items = new ArrayList<>();
         }
@@ -51,7 +63,7 @@ public class ImagesRowAdapter extends RecyclerView.Adapter<ImagesRowAdapter.View
         notifyItemInserted(items.size() - 1);
     }
 
-    /*public void updateItems(List<ImagesRow> items) {
+    /*public void updateItems(List<ImagesPair> items) {
         if (items == null) {
             return;
         }
@@ -94,24 +106,48 @@ public class ImagesRowAdapter extends RecyclerView.Adapter<ImagesRowAdapter.View
             img.requestLayout();
         }
 
-        void bindData(final ImagesRow imagesRow) {
+        void bindData(final ImagesPair imagesRow) {
             loadImage(imagesRow.getLeftPic(), imgLeft);
             loadImage(imagesRow.getRightPic(), imgRight);
         }
 
-        private void loadImage(File image, ImageView img) {
-            Picasso.get()
-                    .load(image.getFileDownloadLink())
-                    .resize(150, 150)
+        private void loadImage(Image image, ImageView img) {
+            OkHttpClient client = new OkHttpClient.Builder()
+                    .addInterceptor(new Interceptor() {
+                        @Override
+                        public Response intercept(@NonNull Chain chain) throws IOException {
+                            Request newRequest = chain.request().newBuilder()
+                                    .addHeader("Authorization", "OAuth" + OAuth.token)
+                                    .build();
+                            return chain.proceed(newRequest);
+                        }
+                    })
+                    .build();
+
+            Picasso picasso = new Picasso.Builder(context)
+                    .downloader(new OkHttp3Downloader(client))
+                    .build();
+
+            picasso.load(image.getFileDownloadLink())
+                    .placeholder(/*R.drawable.placeholder*/R.mipmap.ic_launcher_round)
+                    .fit()
+                    //.resize(150, 150)
                     .centerCrop()
                     .into(img);
+
+            /*Picasso.get()
+                    .load(image.getFileDownloadLink())
+                    .placeholder(R.mipmap.ic_launcher_round)
+                    .fit()
+                    .centerCrop()
+                    .into(img);*/
         }
 
         @Override
         public void onClick(View v) {
             int position = getAdapterPosition();
             if (position != RecyclerView.NO_POSITION) {
-                ImagesRow row = items.get(position);
+                ImagesPair row = items.get(position);
                 switch (v.getId()) {
                     case R.id.leftImg:
                         itemClick(row.getLeftPic());
@@ -123,7 +159,7 @@ public class ImagesRowAdapter extends RecyclerView.Adapter<ImagesRowAdapter.View
             }
         }
 
-        private void itemClick(File image) {
+        private void itemClick(Image image) {
             onItemClickListener.onItemClick(image.getFileDownloadLink());
         }
     }

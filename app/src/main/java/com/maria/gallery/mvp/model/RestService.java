@@ -1,13 +1,13 @@
 package com.maria.gallery.mvp.model;
 
 
-import com.maria.gallery.mvp.model.data.File;
+import com.maria.gallery.mvp.model.data.Image;
 
 import java.util.List;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;
-import retrofit2.http.Streaming;
+import retrofit2.http.Query;
 
 public interface RestService {
 
@@ -16,7 +16,10 @@ public interface RestService {
 
     //@Headers("Authorization: OAuth " + AUTH_TOKEN)
     @GET("resources/last-uploaded")
-    Observable<BaseResponse<List<File>>> getFeed();
+    Observable<BaseResponse<List<Image>>> getFeed(
+            @Query("limit") final int limit,
+            @Query("media_type") final String mediaType
+    );
 
     //@Streaming
     //@GET

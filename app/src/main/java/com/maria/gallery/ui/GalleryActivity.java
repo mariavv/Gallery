@@ -10,15 +10,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.maria.gallery.R;
 import com.maria.gallery.adapter.ImagesRowAdapter;
-import com.maria.gallery.mvp.model.data.File;
-import com.maria.gallery.mvp.model.data.ImagesRow;
+import com.maria.gallery.mvp.model.data.Image;
+import com.maria.gallery.mvp.model.data.ImagesPair;
 import com.maria.gallery.mvp.present.GalleryPresenter;
 import com.maria.gallery.mvp.view.GalleryView;
 import com.maria.gallery.mvp.model.OAuth;
@@ -111,7 +110,7 @@ public class GalleryActivity extends MvpAppCompatActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == 2131165253) {
-            presenter.onSync();
+            presenter.onSync(adapter);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -132,13 +131,13 @@ public class GalleryActivity extends MvpAppCompatActivity
     }
 
     @Override
-    public void fillFeed(List<File> images) {
+    public void fillFeed(List<Image> images) {
         presenter.parseFeed(images);
     }
 
     @Override
-    public void onRowsSet(List<ImagesRow> imageRows) {
-        for (ImagesRow row : imageRows) {
+    public void onRowsSet(List<ImagesPair> imagesPairRows) {
+        for (ImagesPair row : imagesPairRows) {
             adapter.addItem(row);
         }
     }
