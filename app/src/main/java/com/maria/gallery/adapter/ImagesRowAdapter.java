@@ -95,7 +95,7 @@ public class ImagesRowAdapter extends RecyclerView.Adapter<ImagesRowAdapter.View
     }
 
     public interface cBack {
-        void onImageLoaded(ImageView view, InputStream bytes, Image image) throws IOException;
+        void onImageLoaded(ImageView view, Drawable pic) throws IOException;
     }
 
     public interface Listener {
@@ -146,13 +146,12 @@ public class ImagesRowAdapter extends RecyclerView.Adapter<ImagesRowAdapter.View
                 }
 
                 @Override
-                public void onResponse(@NonNull Call call, @NonNull Response response) {
+                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                     ResponseBody body = response.body();
                     if (body != null) {
-                        //cback.onImageLoaded(view, body.byteStream(), image);
-
                         Drawable pic = Drawable.createFromStream(body.byteStream(), "okio.RealBufferedSource");
-                        listener.onGetImage(view, pic);
+                        cback.onImageLoaded(view, pic);
+                        //listener.onGetImage(view, pic);
                     }
                 }
             });
@@ -210,13 +209,15 @@ public class ImagesRowAdapter extends RecyclerView.Adapter<ImagesRowAdapter.View
         }
 
         @Override
-        public void onImageLoaded(ImageView view, InputStream bytes, Image image) {
-            Drawable pic = Drawable.createFromStream(bytes, "okio.RealBufferedSource");
+        public void onImageLoaded(ImageView view, Drawable pic) {
+            /*Drawable pic = Drawable.createFromStream(bytes, "okio.RealBufferedSource");
 
             Glide.with(itemView.getContext())
                     .load(image.getFileDownloadLink())
                     .apply(RequestOptions.placeholderOf(R.drawable.image_24))
-                    .into(view);
+                    .into(view);*/
+
+            listener.onGetImage(view, pic);
         }
     }
 }

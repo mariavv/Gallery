@@ -11,7 +11,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
@@ -42,6 +44,8 @@ public class GalleryActivity extends MvpAppCompatActivity
     @InjectPresenter
     GalleryPresenter presenter;
 
+    ProgressBar progressBar;
+
     RecyclerView recycler;
     ImagesRowAdapter adapter;
 
@@ -71,6 +75,8 @@ public class GalleryActivity extends MvpAppCompatActivity
     }
 
     private void configureViews() {
+        progressBar = findViewById(R.id.progressBar);
+
         recycler = findViewById(R.id.recycler);
         configureRecyclerView();
 
@@ -122,6 +128,9 @@ public class GalleryActivity extends MvpAppCompatActivity
 
     private void onHaveToken(String token) {
         OAuth.token = token;
+
+        progressBar.setVisibility(View.VISIBLE);
+
         presenter.onCreateActivity();
     }
 
@@ -142,6 +151,8 @@ public class GalleryActivity extends MvpAppCompatActivity
 
     @Override
     public void onRowsSet(List<ImagesPair> imagesPairRows) {
+        progressBarStop();
+
         for (ImagesPair row : imagesPairRows) {
             adapter.addItem(row);
         }
@@ -149,7 +160,14 @@ public class GalleryActivity extends MvpAppCompatActivity
 
     @Override
     public void errorGetFeed(Throwable throwable) {
+        progressBarStop();
         showMessage(throwable.getMessage());
+    }
+
+    private void progressBarStop() {
+        if (this.progressBar != null) {
+            this.progressBar.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -162,7 +180,7 @@ public class GalleryActivity extends MvpAppCompatActivity
     public void onGetImage(ImageView view, Drawable image) {
         this.runOnUiThread(() -> Glide.with(this)
                 .load(image)
-                .apply(RequestOptions.placeholderOf(R.drawable.image_24).fitCenter())
+                .apply(RequestOptions.placeholderOf(R.drawable.image_24).centerCrop())
                 //.apply(RequestOptions.fitCenterTransform())
                 .into(view));
     }

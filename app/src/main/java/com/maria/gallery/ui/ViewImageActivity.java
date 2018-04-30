@@ -30,7 +30,7 @@ public class ViewImageActivity extends AppCompatActivity {
         setContentView(R.layout.activity_view_image);
 
         ImageView image = findViewById(R.id.image);
-        ProgressBar progressBar = findViewById(R.id.progressBar);
+        ProgressBar progressBar = findViewById(R.id.imgProgressBar);
         progressBar.setVisibility(View.VISIBLE);
         Picasso.get()
                 .load(getIntent().getStringExtra(ARG_FILE_DOWNLOAD_LINK))
