@@ -1,6 +1,6 @@
 package com.maria.gallery.adapter;
 
-import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,37 +9,40 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.maria.gallery.R;
 import com.maria.gallery.mvp.model.OAuth;
 import com.maria.gallery.mvp.model.data.Image;
 import com.maria.gallery.mvp.model.data.ImagesPair;
-import com.squareup.picasso.OkHttp3Downloader;
-import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import okhttp3.Interceptor;
+import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 public class ImagesRowAdapter extends RecyclerView.Adapter<ImagesRowAdapter.ViewHolder> {
-
-    private Context context;
 
     private List<ImagesPair> items = new ArrayList<>();
 
     private OnItemClickListener onItemClickListener;
+    private cBack cback;
+    private Listener listener;
+
 
     private int screenWidth;
 
     @NonNull
     @Override
     public ImagesRowAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        context = parent.getContext();
-        View v = LayoutInflater.from(context)
+        View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_images_row, parent, false);
 
         return new ViewHolder(v);
@@ -75,15 +78,31 @@ public class ImagesRowAdapter extends RecyclerView.Adapter<ImagesRowAdapter.View
         this.onItemClickListener = onItemClickListener;
     }
 
+    private void setCBack(cBack cback) {
+        this.cback = cback;
+    }
+
     public void configWidth(int screenWidth) {
         this.screenWidth = screenWidth;
+    }
+
+    public void setListener(Listener listener) {
+        this.listener = listener;
     }
 
     public interface OnItemClickListener {
         void onItemClick(String fileDownloadLink);
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public interface cBack {
+        void onImageLoaded(ImageView view, InputStream bytes, Image image) throws IOException;
+    }
+
+    public interface Listener {
+        void onGetImage(ImageView view, Drawable image);
+    }
+
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, cBack {
 
         ImageView imgLeft, imgRight;
 
@@ -95,6 +114,8 @@ public class ImagesRowAdapter extends RecyclerView.Adapter<ImagesRowAdapter.View
 
             setImgWidth(imgLeft);
             setImgWidth(imgRight);
+
+            setCBack(this);
 
             imgLeft.setOnClickListener(this);
             imgRight.setOnClickListener(this);
@@ -111,29 +132,54 @@ public class ImagesRowAdapter extends RecyclerView.Adapter<ImagesRowAdapter.View
             loadImage(imagesRow.getRightPic(), imgRight);
         }
 
-        private void loadImage(Image image, ImageView img) {
-            OkHttpClient client = new OkHttpClient.Builder()
-                    .addInterceptor(new Interceptor() {
-                        @Override
-                        public Response intercept(@NonNull Chain chain) throws IOException {
-                            Request newRequest = chain.request().newBuilder()
-                                    .addHeader("Authorization", "OAuth" + OAuth.token)
-                                    .build();
-                            return chain.proceed(newRequest);
-                        }
+        private void loadImage(Image image, ImageView view) {
+            OkHttpClient okHttpClient = new OkHttpClient();
+            Request request = new Request.Builder()
+                    .url(image.getPreviewDownloadLink())
+                    .addHeader("authorization", "OAuth " + OAuth.token)
+                    .build();
+
+            okHttpClient.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(@NonNull Call call, @NonNull IOException e) {
+
+                }
+
+                @Override
+                public void onResponse(@NonNull Call call, @NonNull Response response) {
+                    ResponseBody body = response.body();
+                    if (body != null) {
+                        //cback.onImageLoaded(view, body.byteStream(), image);
+
+                        Drawable pic = Drawable.createFromStream(body.byteStream(), "okio.RealBufferedSource");
+                        listener.onGetImage(view, pic);
+                    }
+                }
+            });
+
+            /*Glide.with(itemView.getContext())
+                    .load(image.getFileDownloadLink())
+                    .apply(RequestOptions.placeholderOf(R.drawable.image_24))
+                    .into(view);*/
+
+            /*OkHttpClient client = new OkHttpClient.Builder()
+                    .addInterceptor(chain -> {
+                        Request newRequest = chain.request().newBuilder()
+                                .addHeader("Authorization", "OAuth" + OAuth.token)
+                                .build();
+                        return chain.proceed(newRequest);
                     })
                     .build();
 
-            Picasso picasso = new Picasso.Builder(context)
+            Picasso picasso = new Picasso.Builder(itemView.getContext())
                     .downloader(new OkHttp3Downloader(client))
                     .build();
 
-            picasso.load(image.getFileDownloadLink())
-                    .placeholder(/*R.drawable.placeholder*/R.mipmap.ic_launcher_round)
+            picasso.load(image.getPreviewDownloadLink())
+                    .placeholder(R.drawable.image_24)
                     .fit()
-                    //.resize(150, 150)
                     .centerCrop()
-                    .into(img);
+                    .into(view);*/
 
             /*Picasso.get()
                     .load(image.getFileDownloadLink())
@@ -161,6 +207,16 @@ public class ImagesRowAdapter extends RecyclerView.Adapter<ImagesRowAdapter.View
 
         private void itemClick(Image image) {
             onItemClickListener.onItemClick(image.getFileDownloadLink());
+        }
+
+        @Override
+        public void onImageLoaded(ImageView view, InputStream bytes, Image image) {
+            Drawable pic = Drawable.createFromStream(bytes, "okio.RealBufferedSource");
+
+            Glide.with(itemView.getContext())
+                    .load(image.getFileDownloadLink())
+                    .apply(RequestOptions.placeholderOf(R.drawable.image_24))
+                    .into(view);
         }
     }
 }

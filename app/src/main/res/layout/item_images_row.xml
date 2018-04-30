@@ -13,19 +13,19 @@
             android:id="@+id/leftImg"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-
-            android:scaleType="centerCrop"
+            android:adjustViewBounds="true"
+            android:scaleType="center"
             android:contentDescription="@string/open_image"
-            tools:src="@drawable/ic_launcher_background" />
+            tools:src="@drawable/image_24" />
 
         <ImageView
             android:id="@+id/rightImg"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-
-            android:scaleType="centerCrop"
+            android:adjustViewBounds="true"
+            android:scaleType="center"
             android:contentDescription="@string/open_image"
-            tools:src="@drawable/ic_launcher_background" />
+            tools:src="@drawable/image_24" />
 
     </LinearLayout>
 </android.support.v7.widget.CardView>
