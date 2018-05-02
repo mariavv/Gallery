@@ -2,7 +2,7 @@ package com.maria.gallery.mvp.model.data;
 
 public class ImagesPair {
 
-    Image leftPic, rightPic;
+    private Image leftPic, rightPic;
 
     public ImagesPair(Image leftPic, Image rightPic) {
         this.leftPic = leftPic;

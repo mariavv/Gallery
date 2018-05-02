@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Image /*implements Parcelable*/ {
+public class Image {
 
     @NonNull
     //@PrimaryKey

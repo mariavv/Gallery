@@ -108,7 +108,7 @@ public class ImagesRowAdapter extends RecyclerView.Adapter<ImagesRowAdapter.View
             Glide.with(itemView.getContext())
                     .load(new GlideUrl(image.getPreviewDownloadLink(),
                                     new LazyHeaders.Builder()
-                                            .addHeader(OAuth.auth, OAuth.oauth)
+                                            .addHeader("Authorization", "OAuth " + OAuth.token)
                                             .build()
                             )
                     )
