@@ -2,8 +2,9 @@
 <resources>
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="row_layout_height">155dp</dimen>
+    <dimen name="row_layout_height">160dp</dimen>
     <dimen name="main_progressBar_size">25dp</dimen>
     <dimen name="main_progressBar_marginTop">50dp</dimen>
     <dimen name="scrollbarSize">3dp</dimen>
+    <dimen name="images_space">1dp</dimen>
 </resources>

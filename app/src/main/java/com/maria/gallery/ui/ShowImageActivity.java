@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -43,6 +44,11 @@ public class ShowImageActivity extends AppCompatActivity implements ShowImageVie
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_image);
 
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
         image = findViewById(R.id.image);
         progressBar = findViewById(R.id.imgProgressBar);
 
@@ -68,5 +74,13 @@ public class ShowImageActivity extends AppCompatActivity implements ShowImageVie
                     }
                 })
                 .into(image);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == 16908332) {
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

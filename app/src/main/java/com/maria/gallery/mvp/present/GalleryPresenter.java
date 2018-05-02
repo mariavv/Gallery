@@ -21,10 +21,6 @@ public class GalleryPresenter extends MvpPresenter<GalleryView> {
 
     private final FeedRepo feedRepo = new FeedRepo();
 
-    public void onCreateActivity() {
-        loadFeed();
-    }
-
     public void parseFeed(List<Image> images) {
         List<ImagesPair> imagesPairs = new ArrayList<>();
 
@@ -42,13 +38,8 @@ public class GalleryPresenter extends MvpPresenter<GalleryView> {
         getViewState().onRowsSet(imagesPairs);
     }
 
-    public void onSync(ImagesRowAdapter adapter) {
-        //loadFeed();
-        //TODO adapter.updateDataSet();
-    }
-
     @SuppressLint("CheckResult")
-    private void loadFeed() {
+    public void loadFeed() {
         feedRepo.getFeed()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
