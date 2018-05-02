@@ -3,7 +3,6 @@ package com.maria.gallery.ui;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Point;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,14 +11,11 @@ import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.maria.gallery.R;
 import com.maria.gallery.adapter.ImagesRowAdapter;
 import com.maria.gallery.mvp.model.data.Image;
@@ -35,7 +31,7 @@ import com.yandex.authsdk.YandexAuthToken;
 import java.util.List;
 
 public class GalleryActivity extends MvpAppCompatActivity
-        implements GalleryView, ImagesRowAdapter.OnItemClickListener, ImagesRowAdapter.Listener {
+        implements GalleryView, ImagesRowAdapter.OnItemClickListener {
 
     private static final int REQUEST_LOGIN_SDK = 2;
 
@@ -89,7 +85,6 @@ public class GalleryActivity extends MvpAppCompatActivity
         configureRecyclerView();
 
         adapter.setOnItemClickListener(GalleryActivity.this);
-        adapter.setListener(GalleryActivity.this);
 
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -184,23 +179,8 @@ public class GalleryActivity extends MvpAppCompatActivity
 
     @Override
     public void onItemClick(String fileDownloadLink) {
-        Intent intent = ViewImageActivity.createStartIntent(this, fileDownloadLink);
+        Intent intent = ShowImageActivity.createStartIntent(this, fileDownloadLink);
         startActivity(intent);
-    }
-
-    @Override
-    public void onGetImage(ImageView view, Drawable image) {
-        /*this.runOnUiThread(() -> Glide.with(this)
-                .load(image)
-                .apply(RequestOptions.placeholderOf(R.drawable.image_24).centerCrop())
-                //.apply(RequestOptions.fitCenterTransform())
-                .into(view));*/
-
-        this.runOnUiThread(() -> Glide.with(GalleryActivity.this)
-                .load(image)
-                .apply(RequestOptions.placeholderOf(R.drawable.image_24).centerCrop())
-                //.apply(RequestOptions.fitCenterTransform())
-                .into(view));
     }
 
     @Override

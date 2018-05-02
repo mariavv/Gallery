@@ -8,16 +8,25 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
+import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.maria.gallery.R;
+import com.maria.gallery.mvp.present.ShowImagePresenter;
+import com.maria.gallery.mvp.view.ShowImageView;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
-public class ViewImageActivity extends AppCompatActivity {
+public class ShowImageActivity extends AppCompatActivity implements ShowImageView {
 
     public static final String ARG_FILE_DOWNLOAD_LINK = "fileDownloadLink";
 
+    @InjectPresenter
+    ShowImagePresenter presenter;
+
+    ImageView image;
+    ProgressBar progressBar;
+
     public static Intent createStartIntent(Context context, String fileDownloadLink) {
-        Intent intent = new Intent(context, ViewImageActivity.class);
+        Intent intent = new Intent(context, ShowImageActivity.class);
         Bundle arguments = new Bundle();
         arguments.putString(ARG_FILE_DOWNLOAD_LINK, fileDownloadLink);
         intent.putExtras(arguments);
@@ -29,8 +38,13 @@ public class ViewImageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_image);
 
-        ImageView image = findViewById(R.id.image);
-        ProgressBar progressBar = findViewById(R.id.imgProgressBar);
+        image = findViewById(R.id.image);
+        progressBar = findViewById(R.id.imgProgressBar);
+
+        showImage();
+    }
+
+    public void showImage() {
         progressBar.setVisibility(View.VISIBLE);
         Picasso.get()
                 .load(getIntent().getStringExtra(ARG_FILE_DOWNLOAD_LINK))

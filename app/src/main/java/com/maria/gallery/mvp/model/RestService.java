@@ -14,10 +14,8 @@ import retrofit2.http.Query;
 
 public interface RestService {
 
-    //String AUTH_TOKEN = OAuth.token;
     String API_URL = "https://cloud-api.yandex.net:443/v1/disk/";
 
-    //@Headers("Authorization: OAuth " + AUTH_TOKEN)
     @GET("resources/last-uploaded")
     Observable<BaseResponse<List<Image>>> getFeed(
             @Query("limit") final int limit,

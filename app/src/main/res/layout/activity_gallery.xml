@@ -8,10 +8,10 @@
 
     <ProgressBar
         android:id="@+id/progressBar"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
+        android:layout_width="@dimen/main_progressBar_size"
+        android:layout_height="@dimen/main_progressBar_size"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="@dimen/main_progressBar_marginTop"
          />
 
     <android.support.v7.widget.RecyclerView
@@ -20,7 +20,7 @@
         android:layout_height="match_parent"
         android:scrollbars="vertical"
         android:scrollbarTrackVertical="@android:color/white"
-        android:scrollbarSize="3dp"
+        android:scrollbarSize="@dimen/scrollbarSize"
         tools:listitem="@layout/item_images_row" />
 
 </RelativeLayout>
