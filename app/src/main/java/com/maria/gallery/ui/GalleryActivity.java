@@ -39,6 +39,8 @@ public class GalleryActivity extends MvpAppCompatActivity
 
     private static final int REQUEST_LOGIN_SDK = 2;
 
+    private static final String KEY_TURN = "TURN";
+
     public static final String TOKEN = "TOKEN";
 
     @InjectPresenter
@@ -51,10 +53,16 @@ public class GalleryActivity extends MvpAppCompatActivity
 
     private YandexAuthSdk sdk;
 
+    private Boolean turn;
+    private int countViews;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gallery);
+
+        turn = savedInstanceState != null && savedInstanceState.getBoolean(KEY_TURN);
+        countViews = 1;
 
         configureViews();
 
@@ -120,9 +128,9 @@ public class GalleryActivity extends MvpAppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == 2131165253) {
+        /*if (item.getItemId() == 2131165253) {
             presenter.onSync(adapter);
-        }
+        }*/
         return super.onOptionsItemSelected(item);
     }
 
@@ -131,11 +139,13 @@ public class GalleryActivity extends MvpAppCompatActivity
 
         progressBar.setVisibility(View.VISIBLE);
 
-        presenter.onCreateActivity();
+        if (!turn) {
+            presenter.onCreateActivity();
+        }
     }
 
     private void showMessage(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     private void saveToken(String token) {
@@ -151,10 +161,12 @@ public class GalleryActivity extends MvpAppCompatActivity
 
     @Override
     public void onRowsSet(List<ImagesPair> imagesPairRows) {
-        progressBarStop();
+        if (countViews++ < 2) {
+            progressBarStop();
 
-        for (ImagesPair row : imagesPairRows) {
-            adapter.addItem(row);
+            for (ImagesPair row : imagesPairRows) {
+                adapter.addItem(row);
+            }
         }
     }
 
@@ -178,10 +190,23 @@ public class GalleryActivity extends MvpAppCompatActivity
 
     @Override
     public void onGetImage(ImageView view, Drawable image) {
-        this.runOnUiThread(() -> Glide.with(this)
+        /*this.runOnUiThread(() -> Glide.with(this)
+                .load(image)
+                .apply(RequestOptions.placeholderOf(R.drawable.image_24).centerCrop())
+                //.apply(RequestOptions.fitCenterTransform())
+                .into(view));*/
+
+        this.runOnUiThread(() -> Glide.with(GalleryActivity.this)
                 .load(image)
                 .apply(RequestOptions.placeholderOf(R.drawable.image_24).centerCrop())
                 //.apply(RequestOptions.fitCenterTransform())
                 .into(view));
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putBoolean(KEY_TURN, true);
     }
 }

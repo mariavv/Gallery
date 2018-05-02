@@ -8,7 +8,7 @@ import io.reactivex.Observable;
 
 public class FeedRepo {
 
-    private static final int ITEMS_LIMIT = 20;
+    private static final int ITEMS_LIMIT = 4;
     private static final String MEDIA_TYPE = "image";
 
     private RestService restService = RestServiceProvider.newInstance().getRestService();

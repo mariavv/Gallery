@@ -17,7 +17,6 @@ import com.maria.gallery.mvp.model.data.Image;
 import com.maria.gallery.mvp.model.data.ImagesPair;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -150,16 +149,16 @@ public class ImagesRowAdapter extends RecyclerView.Adapter<ImagesRowAdapter.View
                     ResponseBody body = response.body();
                     if (body != null) {
                         Drawable pic = Drawable.createFromStream(body.byteStream(), "okio.RealBufferedSource");
-                        cback.onImageLoaded(view, pic);
+                        //!!!!!!cback.onImageLoaded(view, pic);
                         //listener.onGetImage(view, pic);
                     }
                 }
             });
 
-            /*Glide.with(itemView.getContext())
+            Glide.with(itemView.getContext())
                     .load(image.getFileDownloadLink())
                     .apply(RequestOptions.placeholderOf(R.drawable.image_24))
-                    .into(view);*/
+                    .into(view);
 
             /*OkHttpClient client = new OkHttpClient.Builder()
                     .addInterceptor(chain -> {
@@ -213,7 +212,7 @@ public class ImagesRowAdapter extends RecyclerView.Adapter<ImagesRowAdapter.View
             /*Drawable pic = Drawable.createFromStream(bytes, "okio.RealBufferedSource");
 
             Glide.with(itemView.getContext())
-                    .load(image.getFileDownloadLink())
+                    .load(pic)
                     .apply(RequestOptions.placeholderOf(R.drawable.image_24))
                     .into(view);*/
 

@@ -54,4 +54,11 @@ public class GalleryPresenter extends MvpPresenter<GalleryView> {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(getViewState()::fillFeed, getViewState()::errorGetFeed);
     }
+
+    @Override
+    protected void onFirstViewAttach() {
+        int b = this.getAttachedViews().size();
+        super.onFirstViewAttach();
+        int gb = this.getAttachedViews().size();
+     }
 }
