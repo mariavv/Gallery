@@ -1,4 +1,4 @@
-package com.maria.gallary;
+package com.maria.gallery;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

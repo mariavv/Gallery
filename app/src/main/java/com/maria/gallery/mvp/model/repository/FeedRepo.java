@@ -1,6 +1,9 @@
-package com.maria.gallery.mvp.model;
+package com.maria.gallery.mvp.model.repository;
 
-import com.maria.gallery.mvp.model.data.Image;
+import com.maria.gallery.mvp.model.entity.Image;
+import com.maria.gallery.mvp.model.network.BaseResponse;
+import com.maria.gallery.mvp.model.network.RestService;
+import com.maria.gallery.mvp.model.network.RestServiceProvider;
 
 import java.util.List;
 

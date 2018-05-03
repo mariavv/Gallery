@@ -1,11 +1,9 @@
 package com.maria.gallery.ui;
 
 import android.content.Intent;
-import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,16 +13,17 @@ import android.widget.Toast;
 import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.maria.gallery.R;
-import com.maria.gallery.adapter.ImagesRowAdapter;
-import com.maria.gallery.mvp.model.data.Image;
-import com.maria.gallery.mvp.model.data.ImagesPair;
+import com.maria.gallery.tool.WindowHelper;
+import com.maria.gallery.ui.adapter.FeedAdapter;
+import com.maria.gallery.mvp.model.entity.Image;
+import com.maria.gallery.mvp.model.entity.ImagesPair;
 import com.maria.gallery.mvp.present.GalleryPresenter;
 import com.maria.gallery.mvp.view.GalleryView;
 
 import java.util.List;
 
 public class GalleryActivity extends MvpAppCompatActivity
-        implements GalleryView, ImagesRowAdapter.OnItemClickListener {
+        implements GalleryView, FeedAdapter.OnItemClickListener {
 
     private static final String KEY_TURN = "TURN";
 
@@ -34,7 +33,7 @@ public class GalleryActivity extends MvpAppCompatActivity
     ProgressBar progressBar;
 
     RecyclerView recycler;
-    ImagesRowAdapter adapter;
+    FeedAdapter adapter;
 
     private Boolean turn;
     private int countViews;
@@ -63,17 +62,10 @@ public class GalleryActivity extends MvpAppCompatActivity
 
         recycler = findViewById(R.id.recycler);
         configureRecyclerView();
-
-        adapter.setOnItemClickListener(GalleryActivity.this);
-
-        Display display = getWindowManager().getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        adapter.setScreenWidth(size.x);
     }
 
     private void configureRecyclerView() {
-        adapter = new ImagesRowAdapter();
+        adapter = new FeedAdapter(this, WindowHelper.screenWidth(getWindowManager()));
         recycler.setAdapter(adapter);
 
         recycler.setLayoutManager(new LinearLayoutManager(this));

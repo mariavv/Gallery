@@ -1,6 +1,10 @@
-package com.maria.gallery.mvp.model;
+package com.maria.gallery.mvp.model.network;
 
 import com.google.gson.annotations.SerializedName;
+
+/*
+Хранит ответ с сервера в виде модели.
+ */
 
 public class BaseResponse<T> {
 

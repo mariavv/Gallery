@@ -1,9 +1,9 @@
-package com.maria.gallery.mvp.model;
+package com.maria.gallery.mvp.model.network;
 
 
 import android.graphics.drawable.Drawable;
 
-import com.maria.gallery.mvp.model.data.Image;
+import com.maria.gallery.mvp.model.entity.Image;
 
 import java.util.List;
 
@@ -12,6 +12,9 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 
+/*
+Используется для управления адресом запроса к серверу
+ */
 public interface RestService {
 
     String API_URL = "https://cloud-api.yandex.net:443/v1/disk/";

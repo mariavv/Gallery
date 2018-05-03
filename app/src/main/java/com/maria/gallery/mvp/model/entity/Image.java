@@ -1,4 +1,4 @@
-package com.maria.gallery.mvp.model.data;
+package com.maria.gallery.mvp.model.entity;
 
 import android.support.annotation.NonNull;
 

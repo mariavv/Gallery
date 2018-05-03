@@ -1,4 +1,4 @@
-package com.maria.gallery.adapter;
+package com.maria.gallery.ui.adapter;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -13,25 +13,30 @@ import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.model.LazyHeaders;
 import com.bumptech.glide.request.RequestOptions;
 import com.maria.gallery.R;
-import com.maria.gallery.mvp.model.OAuth;
-import com.maria.gallery.mvp.model.data.Image;
-import com.maria.gallery.mvp.model.data.ImagesPair;
+import com.maria.gallery.mvp.model.network.OAuth;
+import com.maria.gallery.mvp.model.entity.Image;
+import com.maria.gallery.mvp.model.entity.ImagesPair;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class ImagesRowAdapter extends RecyclerView.Adapter<ImagesRowAdapter.ViewHolder> {
+public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
 
     private List<ImagesPair> items = new ArrayList<>();
 
     private OnItemClickListener onItemClickListener;
 
-    private int screenWidth;
+    private int feedWidth;
+
+    public FeedAdapter(OnItemClickListener onItemClickListener, int feedWidth) {
+        this.onItemClickListener = onItemClickListener;
+        this.feedWidth = feedWidth;
+    }
 
     @NonNull
     @Override
-    public ImagesRowAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public FeedAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_images_row, parent, false);
 
@@ -39,7 +44,7 @@ public class ImagesRowAdapter extends RecyclerView.Adapter<ImagesRowAdapter.View
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ImagesRowAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull FeedAdapter.ViewHolder holder, int position) {
         holder.bindData(items.get(position));
     }
 
@@ -68,8 +73,8 @@ public class ImagesRowAdapter extends RecyclerView.Adapter<ImagesRowAdapter.View
         this.onItemClickListener = onItemClickListener;
     }
 
-    public void setScreenWidth(int screenWidth) {
-        this.screenWidth = screenWidth;
+    public void setFeedWidth(int feedWidth) {
+        this.feedWidth = feedWidth;
     }
 
     public interface OnItemClickListener {
@@ -95,7 +100,7 @@ public class ImagesRowAdapter extends RecyclerView.Adapter<ImagesRowAdapter.View
 
         private void setImgWidth(ImageView img) {
             LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) img.getLayoutParams();
-            params.width = screenWidth / 2;
+            params.width = feedWidth / 2;
             img.requestLayout();
         }
 

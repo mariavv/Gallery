@@ -3,8 +3,8 @@ package com.maria.gallery.mvp.view;
 import android.content.Intent;
 
 import com.arellomobile.mvp.MvpView;
-import com.maria.gallery.mvp.model.data.Image;
-import com.maria.gallery.mvp.model.data.ImagesPair;
+import com.maria.gallery.mvp.model.entity.Image;
+import com.maria.gallery.mvp.model.entity.ImagesPair;
 
 import java.util.List;
 

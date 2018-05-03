@@ -6,14 +6,12 @@ import android.content.Intent;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
-import com.maria.gallery.adapter.ImagesRowAdapter;
-import com.maria.gallery.mvp.model.FeedRepo;
-import com.maria.gallery.mvp.model.OAuth;
-import com.maria.gallery.mvp.model.data.Image;
-import com.maria.gallery.mvp.model.data.ImagesPair;
+import com.maria.gallery.mvp.model.repository.FeedRepo;
+import com.maria.gallery.mvp.model.network.OAuth;
+import com.maria.gallery.mvp.model.entity.Image;
+import com.maria.gallery.mvp.model.entity.ImagesPair;
 import com.maria.gallery.mvp.view.GalleryView;
 import com.maria.gallery.tool.SaveDataHelper;
-import com.maria.gallery.ui.GalleryActivity;
 import com.yandex.authsdk.YandexAuthException;
 import com.yandex.authsdk.YandexAuthOptions;
 import com.yandex.authsdk.YandexAuthSdk;

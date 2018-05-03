@@ -1,4 +1,8 @@
-package com.maria.gallery.mvp.model.data;
+package com.maria.gallery.mvp.model.entity;
+
+/*
+Структура для элемента RecyclerView
+ */
 
 public class ImagesPair {
 
