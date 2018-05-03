@@ -2,7 +2,7 @@ package com.maria.gallery.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,7 +16,6 @@ import com.maria.gallery.R;
 import com.maria.gallery.tool.WindowHelper;
 import com.maria.gallery.ui.adapter.FeedAdapter;
 import com.maria.gallery.mvp.model.entity.Image;
-import com.maria.gallery.mvp.model.entity.ImagesPair;
 import com.maria.gallery.mvp.present.GalleryPresenter;
 import com.maria.gallery.mvp.view.GalleryView;
 
@@ -68,7 +67,7 @@ public class GalleryActivity extends MvpAppCompatActivity
         adapter = new FeedAdapter(this, WindowHelper.screenWidth(getWindowManager()));
         recycler.setAdapter(adapter);
 
-        recycler.setLayoutManager(new LinearLayoutManager(this));
+        recycler.setLayoutManager(new GridLayoutManager(this, 2));
     }
 
     @Override
@@ -108,16 +107,11 @@ public class GalleryActivity extends MvpAppCompatActivity
     @Override
     public void fillFeed(List<Image> images) {
         int c = 5;
-        presenter.parseFeed(images);
-    }
-
-    @Override
-    public void onRowsSet(List<ImagesPair> imagesPairRows) {
         if (countViews++ < 2) {
             this.progressBar.setVisibility(View.GONE);
 
-            for (ImagesPair row : imagesPairRows) {
-                adapter.addItem(row);
+            for (Image image : images) {
+                adapter.addItem(image);
             }
         }
     }

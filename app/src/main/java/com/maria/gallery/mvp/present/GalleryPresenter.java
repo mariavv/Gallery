@@ -8,17 +8,12 @@ import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.maria.gallery.mvp.model.repository.FeedRepo;
 import com.maria.gallery.mvp.model.network.OAuth;
-import com.maria.gallery.mvp.model.entity.Image;
-import com.maria.gallery.mvp.model.entity.ImagesPair;
 import com.maria.gallery.mvp.view.GalleryView;
 import com.maria.gallery.tool.SaveDataHelper;
 import com.yandex.authsdk.YandexAuthException;
 import com.yandex.authsdk.YandexAuthOptions;
 import com.yandex.authsdk.YandexAuthSdk;
 import com.yandex.authsdk.YandexAuthToken;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -31,23 +26,6 @@ public class GalleryPresenter extends MvpPresenter<GalleryView> {
     private YandexAuthSdk sdk;
 
     private final FeedRepo feedRepo = new FeedRepo();
-
-    public void parseFeed(List<Image> images) {
-        List<ImagesPair> imagesPairs = new ArrayList<>();
-
-        int i = 0;
-        while (i < images.size() - 1) {
-            ImagesPair row = new ImagesPair(images.get(i++), images.get(i++));
-            imagesPairs.add(row);
-        }
-
-        /*if (images.size() % 2 == 1) {
-            ImagesPair row = new ImagesPair(images.get(i), img);
-            imagesPairs.add(row);
-        }*/
-
-        getViewState().onRowsSet(imagesPairs);
-    }
 
     @SuppressLint("CheckResult")
     public void loadFeed() {

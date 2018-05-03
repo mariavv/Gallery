@@ -15,7 +15,6 @@ import com.bumptech.glide.request.RequestOptions;
 import com.maria.gallery.R;
 import com.maria.gallery.mvp.model.network.OAuth;
 import com.maria.gallery.mvp.model.entity.Image;
-import com.maria.gallery.mvp.model.entity.ImagesPair;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +22,7 @@ import java.util.List;
 
 public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
 
-    private List<ImagesPair> items = new ArrayList<>();
+    private List<Image> items = new ArrayList<>();
 
     private OnItemClickListener onItemClickListener;
 
@@ -53,7 +52,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
         return items.size();
     }
 
-    public void addItem(ImagesPair entity) {
+    public void addItem(Image entity) {
         if (items == null) {
             items = new ArrayList<>();
         }
@@ -61,7 +60,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
         notifyItemInserted(items.size() - 1);
     }
 
-    /*public void updateItems(List<ImagesPair> items) {
+    /*public void updateItems(List<Image> items) {
         if (items == null) {
             return;
         }
@@ -69,47 +68,31 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
         notifyDataSetChanged();
     }*/
 
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
-        this.onItemClickListener = onItemClickListener;
-    }
-
-    public void setFeedWidth(int feedWidth) {
-        this.feedWidth = feedWidth;
-    }
-
     public interface OnItemClickListener {
         void onItemClick(String fileDownloadLink);
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        ImageView imgLeft, imgRight;
+        ImageView imgView;
 
         ViewHolder(View itemView) {
             super(itemView);
 
-            imgLeft = itemView.findViewById(R.id.leftImg);
-            imgRight = itemView.findViewById(R.id.rightImg);
+            imgView = itemView.findViewById(R.id.imgView);
 
-            setImgWidth(imgLeft);
-            setImgWidth(imgRight);
+            //setImgWidth();
 
-            imgLeft.setOnClickListener(this);
-            imgRight.setOnClickListener(this);
+            imgView.setOnClickListener(this);
         }
 
-        private void setImgWidth(ImageView img) {
-            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) img.getLayoutParams();
+        private void setImgWidth() {
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) imgView.getLayoutParams();
             params.width = feedWidth / 2;
-            img.requestLayout();
+            imgView.requestLayout();
         }
 
-        void bindData(final ImagesPair imagesRow) {
-            loadImage(imagesRow.getLeftPic(), imgLeft);
-            loadImage(imagesRow.getRightPic(), imgRight);
-        }
-
-        private void loadImage(Image image, ImageView view) {
+        void bindData(final Image image) {
             Glide.with(itemView.getContext())
                     .load(new GlideUrl(image.getPreviewDownloadLink(),
                                     new LazyHeaders.Builder()
@@ -118,27 +101,20 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
                             )
                     )
                     .apply(RequestOptions.placeholderOf(R.drawable.image_24).centerCrop())
-                    .into(view);
+                    .into(imgView);
         }
+
 
         @Override
         public void onClick(View v) {
             int position = getAdapterPosition();
             if (position != RecyclerView.NO_POSITION) {
-                ImagesPair row = items.get(position);
-                switch (v.getId()) {
-                    case R.id.leftImg:
-                        itemClick(row.getLeftPic());
-                        break;
-                    case R.id.rightImg:
-                        itemClick(row.getRightPic());
-                        break;
-                }
+                itemClick(items.get(position));
             }
         }
+    }
 
-        private void itemClick(Image image) {
-            onItemClickListener.onItemClick(image.getFileDownloadLink());
-        }
+    private void itemClick(Image image) {
+        onItemClickListener.onItemClick(image.getFileDownloadLink());
     }
 }
