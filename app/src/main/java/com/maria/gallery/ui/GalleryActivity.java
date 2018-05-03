@@ -1,10 +1,8 @@
 package com.maria.gallery.ui;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Display;
@@ -22,22 +20,13 @@ import com.maria.gallery.mvp.model.data.Image;
 import com.maria.gallery.mvp.model.data.ImagesPair;
 import com.maria.gallery.mvp.present.GalleryPresenter;
 import com.maria.gallery.mvp.view.GalleryView;
-import com.maria.gallery.mvp.model.OAuth;
-import com.yandex.authsdk.YandexAuthException;
-import com.yandex.authsdk.YandexAuthOptions;
-import com.yandex.authsdk.YandexAuthSdk;
-import com.yandex.authsdk.YandexAuthToken;
 
 import java.util.List;
 
 public class GalleryActivity extends MvpAppCompatActivity
         implements GalleryView, ImagesRowAdapter.OnItemClickListener {
 
-    private static final int REQUEST_LOGIN_SDK = 2;
-
     private static final String KEY_TURN = "TURN";
-
-    public static final String TOKEN = "TOKEN";
 
     @InjectPresenter
     GalleryPresenter presenter;
@@ -46,8 +35,6 @@ public class GalleryActivity extends MvpAppCompatActivity
 
     RecyclerView recycler;
     ImagesRowAdapter adapter;
-
-    private YandexAuthSdk sdk;
 
     private Boolean turn;
     private int countViews;
@@ -62,14 +49,7 @@ public class GalleryActivity extends MvpAppCompatActivity
 
         configureViews();
 
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String token = preferences.getString(TOKEN, null);
-        if ((token == null) || (token.length() == 0)) {
-            sdk = new YandexAuthSdk(new YandexAuthOptions(this, true));
-            startActivityForResult(sdk.createLoginIntent(this, null), REQUEST_LOGIN_SDK);
-        } else {
-            onHaveToken(token);
-        }
+        presenter.login(this);
     }
 
     @Override
@@ -89,7 +69,7 @@ public class GalleryActivity extends MvpAppCompatActivity
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
-        adapter.configWidth(size.x);
+        adapter.setScreenWidth(size.x);
     }
 
     private void configureRecyclerView() {
@@ -106,19 +86,8 @@ public class GalleryActivity extends MvpAppCompatActivity
         if (resultCode != RESULT_OK) {
             return;
         }
-        if (requestCode == REQUEST_LOGIN_SDK) {
-            try {
-                final YandexAuthToken yandexAuthToken = sdk.extractToken(resultCode, data);
-                if (yandexAuthToken != null) {
-                    String token = yandexAuthToken.getValue();
-                    saveToken(token);
 
-                    onHaveToken(token);
-                }
-            } catch (YandexAuthException e) {
-                showMessage(e.getLocalizedMessage());
-            }
-        }
+        presenter.activityResult(this, requestCode, resultCode, data);
     }
 
     @Override
@@ -130,9 +99,8 @@ public class GalleryActivity extends MvpAppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    private void onHaveToken(String token) {
-        OAuth.token = token;
-
+    @Override
+    public void showFeed() {
         progressBar.setVisibility(View.VISIBLE);
 
         if (!turn) {
@@ -140,14 +108,9 @@ public class GalleryActivity extends MvpAppCompatActivity
         }
     }
 
-    private void showMessage(String message) {
+    @Override
+    public void showMessage(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-    }
-
-    private void saveToken(String token) {
-        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
-        editor.putString(TOKEN, token);
-        editor.apply();
     }
 
     @Override
@@ -165,6 +128,11 @@ public class GalleryActivity extends MvpAppCompatActivity
                 adapter.addItem(row);
             }
         }
+    }
+
+    @Override
+    public void startYandexAuthActivity(Intent intent, int request) {
+        startActivityForResult(intent, request);
     }
 
     @Override

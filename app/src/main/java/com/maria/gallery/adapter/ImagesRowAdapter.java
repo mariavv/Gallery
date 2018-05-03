@@ -68,7 +68,7 @@ public class ImagesRowAdapter extends RecyclerView.Adapter<ImagesRowAdapter.View
         this.onItemClickListener = onItemClickListener;
     }
 
-    public void configWidth(int screenWidth) {
+    public void setScreenWidth(int screenWidth) {
         this.screenWidth = screenWidth;
     }
 
