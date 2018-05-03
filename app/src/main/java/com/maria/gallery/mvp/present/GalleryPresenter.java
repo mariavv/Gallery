@@ -34,8 +34,6 @@ public class GalleryPresenter extends MvpPresenter<GalleryView> {
 
     private final FeedRepo feedRepo = new FeedRepo();
 
-    private SaveDataHelper saveDataHelper;
-
     public void parseFeed(List<Image> images) {
         List<ImagesPair> imagesPairs = new ArrayList<>();
 
@@ -69,8 +67,7 @@ public class GalleryPresenter extends MvpPresenter<GalleryView> {
      }
 
     public void login(Context context) {
-        saveDataHelper = new SaveDataHelper(context);
-        String token = saveDataHelper.getToken();
+        String token = SaveDataHelper.getToken(context);
         if ((token == null) || (token.length() == 0)) {
             sdk = new YandexAuthSdk(new YandexAuthOptions(context, true));
             getViewState().startYandexAuthActivity(sdk.createLoginIntent(context, null), REQUEST_LOGIN_SDK);
@@ -91,7 +88,7 @@ public class GalleryPresenter extends MvpPresenter<GalleryView> {
             final YandexAuthToken yandexAuthToken = sdk.extractToken(resultCode, data);
             if (yandexAuthToken != null) {
                 String token = yandexAuthToken.getValue();
-                saveDataHelper.saveToken(token, context);
+                SaveDataHelper.saveToken(token, context);
 
                 onHaveToken(token);
             }

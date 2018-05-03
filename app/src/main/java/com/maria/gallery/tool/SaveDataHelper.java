@@ -1,26 +1,24 @@
 package com.maria.gallery.tool;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 public class SaveDataHelper {
 
     private static final String TOKEN = "TOKEN";
 
-    private final SharedPreferences preferences;
-
-    public SaveDataHelper(Context context) {
-        preferences = PreferenceManager.getDefaultSharedPreferences(context);
+    public static String getToken(Context context) {
+        return  PreferenceManager.getDefaultSharedPreferences(context).getString(TOKEN, null);
     }
 
-    public String getToken() {
-        return  preferences.getString(TOKEN, null);
-    }
-
-    public void saveToken(String token, Context context) {
-        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
+    public static void saveToken(String token, Context context) {
+        /*SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
         editor.putString(TOKEN, token);
-        editor.apply();
+        editor.apply();*/
+
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .putString(TOKEN, token)
+                .apply();
     }
 }

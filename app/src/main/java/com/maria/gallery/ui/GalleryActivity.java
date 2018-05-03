@@ -122,7 +122,7 @@ public class GalleryActivity extends MvpAppCompatActivity
     @Override
     public void onRowsSet(List<ImagesPair> imagesPairRows) {
         if (countViews++ < 2) {
-            progressBarStop();
+            this.progressBar.setVisibility(View.GONE);
 
             for (ImagesPair row : imagesPairRows) {
                 adapter.addItem(row);
@@ -137,14 +137,8 @@ public class GalleryActivity extends MvpAppCompatActivity
 
     @Override
     public void errorGetFeed(Throwable throwable) {
-        progressBarStop();
+        this.progressBar.setVisibility(View.GONE);
         showMessage(throwable.getMessage());
-    }
-
-    private void progressBarStop() {
-        if (this.progressBar != null) {
-            this.progressBar.setVisibility(View.GONE);
-        }
     }
 
     @Override
