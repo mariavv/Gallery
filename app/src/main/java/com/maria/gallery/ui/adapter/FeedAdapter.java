@@ -26,11 +26,8 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
 
     private OnItemClickListener onItemClickListener;
 
-    private int feedWidth;
-
-    public FeedAdapter(OnItemClickListener onItemClickListener, int feedWidth) {
+    public FeedAdapter(OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
-        this.feedWidth = feedWidth;
     }
 
     @NonNull
@@ -82,15 +79,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
 
             imgView = itemView.findViewById(R.id.imgView);
 
-            //setImgWidth();
-
             imgView.setOnClickListener(this);
-        }
-
-        private void setImgWidth() {
-            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) imgView.getLayoutParams();
-            params.width = feedWidth / 2;
-            imgView.requestLayout();
         }
 
         void bindData(final Image image) {

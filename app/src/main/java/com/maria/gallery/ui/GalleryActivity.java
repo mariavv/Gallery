@@ -13,7 +13,6 @@ import android.widget.Toast;
 import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.maria.gallery.R;
-import com.maria.gallery.tool.WindowHelper;
 import com.maria.gallery.ui.adapter.FeedAdapter;
 import com.maria.gallery.mvp.model.entity.Image;
 import com.maria.gallery.mvp.present.GalleryPresenter;
@@ -35,7 +34,7 @@ public class GalleryActivity extends MvpAppCompatActivity
     FeedAdapter adapter;
 
     private Boolean turn;
-    private int countViews;
+    //private int countViews;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +42,7 @@ public class GalleryActivity extends MvpAppCompatActivity
         setContentView(R.layout.activity_gallery);
 
         turn = savedInstanceState != null && savedInstanceState.getBoolean(KEY_TURN);
-        countViews = 1;
+        //countViews = 1;
 
         configureViews();
 
@@ -64,7 +63,7 @@ public class GalleryActivity extends MvpAppCompatActivity
     }
 
     private void configureRecyclerView() {
-        adapter = new FeedAdapter(this, WindowHelper.screenWidth(getWindowManager()));
+        adapter = new FeedAdapter(this);
         recycler.setAdapter(adapter);
 
         recycler.setLayoutManager(new GridLayoutManager(this, 2));
@@ -106,10 +105,9 @@ public class GalleryActivity extends MvpAppCompatActivity
     @Override
     public void fillFeed(List<Image> images) {
         //if (countViews++ < 2) {
-        //countViews++;
-            this.progressBar.setVisibility(View.GONE);
+        this.progressBar.setVisibility(View.GONE);
 
-            adapter.updateItems(images);
+        adapter.updateItems(images);
         //}
     }
 
