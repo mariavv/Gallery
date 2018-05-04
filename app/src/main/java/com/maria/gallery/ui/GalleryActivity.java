@@ -83,9 +83,8 @@ public class GalleryActivity extends MvpAppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == 2131165258) {
-            progressBar.setVisibility(View.VISIBLE);
-            presenter.loadFeed();
+        if (item.getTitle() == getString(R.string.sync)) {
+            showFeed();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -106,14 +105,12 @@ public class GalleryActivity extends MvpAppCompatActivity
 
     @Override
     public void fillFeed(List<Image> images) {
-        int c = 5;
-        if (countViews++ < 2) {
+        //if (countViews++ < 2) {
+        //countViews++;
             this.progressBar.setVisibility(View.GONE);
 
-            for (Image image : images) {
-                adapter.addItem(image);
-            }
-        }
+            adapter.updateItems(images);
+        //}
     }
 
     @Override

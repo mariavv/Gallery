@@ -7,4 +7,5 @@
     <dimen name="scrollbarSize">3dp</dimen>
     <dimen name="images_space">1dp</dimen>
     <dimen name="imageView_height">160dp</dimen>
+    <dimen name="fit_item_margins">-2dp</dimen>
 </resources>

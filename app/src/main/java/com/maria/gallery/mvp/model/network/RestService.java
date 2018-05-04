@@ -24,11 +24,4 @@ public interface RestService {
             @Query("limit") final int limit,
             @Query("media_type") final String mediaType
     );
-
-    //@Streaming
-    //@GET
-    //Observable<Response<ResponseBody>> downloadFile(@Url String fileUrl);
-
-    @GET
-    Call<Drawable> getPreview();
 }

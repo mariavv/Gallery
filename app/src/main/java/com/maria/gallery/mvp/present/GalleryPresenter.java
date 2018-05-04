@@ -25,10 +25,9 @@ public class GalleryPresenter extends MvpPresenter<GalleryView> {
 
     private YandexAuthSdk sdk;
 
-    private final FeedRepo feedRepo = new FeedRepo();
-
     @SuppressLint("CheckResult")
     public void loadFeed() {
+        FeedRepo feedRepo = new FeedRepo();
         feedRepo.getFeed()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())

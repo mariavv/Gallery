@@ -60,13 +60,14 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
         notifyItemInserted(items.size() - 1);
     }
 
-    /*public void updateItems(List<Image> items) {
+    public void updateItems(List<Image> images) {
         if (items == null) {
             return;
         }
-        this.items = items;
+        items.clear();
+        items.addAll(images);
         notifyDataSetChanged();
-    }*/
+    }
 
     public interface OnItemClickListener {
         void onItemClick(String fileDownloadLink);

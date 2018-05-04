@@ -21,8 +21,8 @@
         android:scrollbars="vertical"
         android:scrollbarTrackVertical="@android:color/white"
         android:scrollbarSize="@dimen/scrollbarSize"
-        android:layout_marginStart="-2dp"
-        android:layout_marginBottom="-1dp"
+        android:layout_marginStart="@dimen/fit_item_margins"
+        android:layout_marginBottom="@dimen/fit_item_margins"
         tools:listitem="@layout/item_images_row" />
 
 </RelativeLayout>
