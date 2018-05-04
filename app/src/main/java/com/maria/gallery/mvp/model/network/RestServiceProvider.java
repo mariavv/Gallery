@@ -48,7 +48,7 @@ public class RestServiceProvider {
             // Настраиваем запросы
             Request request = original.newBuilder()
                     .header("Accept", "application/json")
-                    .header("Authorization", "OAuth " + OAuth.token)
+                    .header("Authorization", "OAuth " + OAuth.getToken())
                     .method(original.method(), original.body())
                     .build();
 

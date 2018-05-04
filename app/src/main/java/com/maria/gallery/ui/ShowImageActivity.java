@@ -39,8 +39,8 @@ public class ShowImageActivity extends MvpAppCompatActivity implements ShowImage
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         image = findViewById(R.id.image);
         progressBar = findViewById(R.id.imgProgressBar);
@@ -56,7 +56,7 @@ public class ShowImageActivity extends MvpAppCompatActivity implements ShowImage
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == 16908332) {
+        if (item.getItemId() == android.R.id.home) {
             finish();
         }
         return super.onOptionsItemSelected(item);

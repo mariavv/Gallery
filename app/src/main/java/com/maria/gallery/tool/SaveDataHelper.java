@@ -12,10 +12,6 @@ public class SaveDataHelper {
     }
 
     public static void saveToken(String token, Context context) {
-        /*SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
-        editor.putString(TOKEN, token);
-        editor.apply();*/
-
         PreferenceManager.getDefaultSharedPreferences(context)
                 .edit()
                 .putString(TOKEN, token)

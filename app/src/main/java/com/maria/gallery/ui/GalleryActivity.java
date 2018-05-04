@@ -57,6 +57,7 @@ public class GalleryActivity extends MvpAppCompatActivity
 
     private void configureViews() {
         progressBar = findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.GONE);
 
         recycler = findViewById(R.id.recycler);
         configureRecyclerView();
@@ -82,7 +83,7 @@ public class GalleryActivity extends MvpAppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getTitle() == getString(R.string.sync)) {
+        if (item.getItemId() == R.id.sync) {
             showFeed();
         }
         return super.onOptionsItemSelected(item);
@@ -105,9 +106,9 @@ public class GalleryActivity extends MvpAppCompatActivity
     @Override
     public void fillFeed(List<Image> images) {
         //if (countViews++ < 2) {
-        this.progressBar.setVisibility(View.GONE);
+            progressBar.setVisibility(View.GONE);
 
-        adapter.updateItems(images);
+            adapter.updateItems(images);
         //}
     }
 
@@ -118,7 +119,7 @@ public class GalleryActivity extends MvpAppCompatActivity
 
     @Override
     public void errorGetFeed(Throwable throwable) {
-        this.progressBar.setVisibility(View.GONE);
+        progressBar.setVisibility(View.GONE);
         showMessage(throwable.getMessage());
     }
 
@@ -132,6 +133,8 @@ public class GalleryActivity extends MvpAppCompatActivity
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        outState.putBoolean(KEY_TURN, true);
+        if (!turn) {
+            outState.putBoolean(KEY_TURN, true);
+        }
     }
 }

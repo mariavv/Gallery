@@ -34,12 +34,12 @@ public class GalleryPresenter extends MvpPresenter<GalleryView> {
                 .subscribe(getViewState()::fillFeed, getViewState()::errorGetFeed);
     }
 
-    @Override
+    /*@Override
     protected void onFirstViewAttach() {
         int b = this.getAttachedViews().size();
         super.onFirstViewAttach();
         int gb = this.getAttachedViews().size();
-     }
+    }*/
 
     public void login(Context context) {
         String token = SaveDataHelper.getToken(context);
@@ -70,10 +70,11 @@ public class GalleryPresenter extends MvpPresenter<GalleryView> {
         } catch (YandexAuthException e) {
             getViewState().showMessage(e.getLocalizedMessage());
         }
+
     }
 
     private void onHaveToken(String token) {
-        OAuth.token = token;
+        OAuth.setToken(token);
         getViewState().showFeed();
     }
 }

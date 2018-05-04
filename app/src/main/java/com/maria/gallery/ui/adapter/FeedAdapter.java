@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.model.GlideUrl;
@@ -34,7 +33,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
     @Override
     public FeedAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_images_row, parent, false);
+                .inflate(R.layout.item_image, parent, false);
 
         return new ViewHolder(v);
     }
@@ -83,15 +82,26 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
         }
 
         void bindData(final Image image) {
-            Glide.with(itemView.getContext())
-                    .load(new GlideUrl(image.getPreviewDownloadLink(),
-                                    new LazyHeaders.Builder()
-                                            .addHeader("Authorization", "OAuth " + OAuth.token)
-                                            .build()
-                            )
-                    )
-                    .apply(RequestOptions.placeholderOf(R.drawable.image_24).centerCrop())
-                    .into(imgView);
+            String preview = image.getPreviewDownloadLink();
+            if (preview != null) {
+                Glide.with(itemView.getContext())
+                        .load(new GlideUrl(preview,
+                                        new LazyHeaders.Builder()
+                                                .addHeader("Authorization", "OAuth " + OAuth.getToken())
+                                                .build()
+                                )
+                        )
+                        .apply(RequestOptions.placeholderOf(R.drawable.image_24).centerCrop())
+                        .into(imgView);
+            } else {
+            /*
+            Если файл порченный
+             */
+                Glide.with(itemView.getContext())
+                        .load("")
+                        .apply(RequestOptions.placeholderOf(R.drawable.image_24).centerCrop())
+                        .into(imgView);
+            }
         }
 
 
