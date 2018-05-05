@@ -75,7 +75,7 @@ public class GalleryPresenter extends MvpPresenter<GalleryView> {
     }
 
     private void onHaveToken(String token) {
-        OAuth.setToken("token");
+        OAuth.setToken(token);
         getViewState().showFeed();
     }
 }

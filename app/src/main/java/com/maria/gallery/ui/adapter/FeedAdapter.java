@@ -83,7 +83,6 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
 
         ImageView imgView;
 
-
         ViewHolder(View itemView) {
             super(itemView);
 
@@ -93,22 +92,6 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
 
         void bindData(final Image image) {
             if (!badFile(image)) {
-                /*Glide.with(itemView.getContext()).asBitmap()
-                        .load(new GlideUrl(image.getPreviewDownloadLink(),
-                                        new LazyHeaders.Builder()
-                                                .addHeader("Authorization", "OAuth " + OAuth.getToken())
-                                                .build()
-                                )
-                        )
-                        .apply(RequestOptions.placeholderOf(R.drawable.image_24).centerCrop())
-                        .into(new SimpleTarget<Bitmap>() {
-                            @Override
-                            public void onResourceReady(@NonNull Bitmap bitmap, Transition<? super Bitmap> transition) {
-                                imgView.setImage(ImageSource.bitmap(bitmap));
-                            }
-                        });*/
-
-
                 Glide.with(itemView.getContext())
                         .load(new GlideUrl(image.getPreviewDownloadLink(),
                                         new LazyHeaders.Builder()

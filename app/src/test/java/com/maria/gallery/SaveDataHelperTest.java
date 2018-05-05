@@ -3,20 +3,17 @@ package com.maria.gallery;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.test.InstrumentationRegistry;
-import android.support.test.runner.AndroidJUnit4;
 
 import com.maria.gallery.tool.SaveDataHelper;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 
-@RunWith(AndroidJUnit4.class)
 public class SaveDataHelperTest {
 
     @Test
-    public void saveAndReadValues() throws Exception {
+    public void saveAndReadValues() {
         Context context = InstrumentationRegistry.getTargetContext();
         SharedPreferences sharedPreferences = context.getSharedPreferences("test", 0);
         sharedPreferences.edit().clear().commit();
@@ -25,6 +22,6 @@ public class SaveDataHelperTest {
         SaveDataHelper.saveToken(token, context);
 
         String savedToken = SaveDataHelper.getToken(context);
-        assertTrue(token.equals(savedToken));
+        assertEquals(token, savedToken);
     }
 }
