@@ -5,11 +5,16 @@ import com.google.gson.reflect.TypeToken;
 import com.maria.gallery.mvp.model.entity.Image;
 import com.maria.gallery.mvp.model.repository.GalleryJsonDeserializer;
 
+import java.io.IOException;
 import java.util.List;
 
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.EventListener;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
@@ -39,6 +44,35 @@ public class RestServiceProvider {
     }
 
     private RestService createRestService() {
+        /*OkHttpClient client = new OkHttpClient.Builder().build();
+
+        Request request = new Request.Builder()
+                .url("")
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.getLocalizedMessage()
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                try {
+                    response.
+                    Log.d("Response",response.body().string());
+
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                response.body().close();
+            }
+        }
+
+    });*/
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(RestService.API_URL)
                 .client(provideClient())

@@ -64,5 +64,7 @@ dependencies {
     implementation 'com.yandex.android:disk-restapi-sdk:1.0'
     implementation 'com.yandex.android:authsdk:2.0.0'
 
-    testCompile 'org.mockito:mockito-core:2.18.3'
+    ext.mockito_version = '2.18.3'
+    testImplementation "org.mockito:mockito-core:$mockito_version"
+    androidTestImplementation "org.mockito:mockito-android:$mockito_version"
 }

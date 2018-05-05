@@ -1,12 +1,14 @@
 package com.maria.gallery.ui;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -58,13 +60,23 @@ public class GalleryActivity extends MvpAppCompatActivity
     }
 
     private void configureViews() {
-        //Resources.getDimensionPixelSize()
-
         progressBar = findViewById(R.id.progressBar);
         progressBar.setVisibility(View.GONE);
 
         recycler = findViewById(R.id.recycler);
+        configureImageFrameFit();
         configureRecyclerView();
+    }
+
+    /*
+    Отступ слева у ImageView, которая находится в левом ряду создает полосу у левого края экрана
+    Настройка - компенсация отступа, чтобы этой полосы не было видно
+     */
+    private void configureImageFrameFit() {
+        int imgMargin = getResources().getDimensionPixelSize(R.dimen.images_space);
+        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) recycler.getLayoutParams();
+        params.leftMargin = -imgMargin - 1;
+        recycler.requestLayout();
     }
 
     private void configureRecyclerView() {
@@ -114,9 +126,9 @@ public class GalleryActivity extends MvpAppCompatActivity
     @Override
     public void fillFeed(List<Image> images) {
         //if (countViews++ < 2) {
-            progressBar.setVisibility(View.GONE);
+        progressBar.setVisibility(View.GONE);
 
-            adapter.updateItems(images);
+        adapter.updateItems(images);
         //}
     }
 
@@ -128,6 +140,15 @@ public class GalleryActivity extends MvpAppCompatActivity
     @Override
     public void errorGetFeed(Throwable throwable) {
         progressBar.setVisibility(View.GONE);
+
+        /*String err = throwable.getCause().getMessage();
+        String mess = "";
+        if (err.contains("UNAUTHORIZED")) {
+            mess = "Не авторизован";
+        } else if (err.contains("Timeout")) {
+            mess = "Превышено время ожидания";
+        }*/
+
         showMessage(throwable.getMessage());
     }
 
