@@ -1,5 +1,9 @@
 package com.maria.gallery.ui.adapter;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,12 +15,18 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.model.LazyHeaders;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
+import com.davemorrissey.labs.subscaleview.ImageSource;
+import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.maria.gallery.R;
 import com.maria.gallery.mvp.model.network.OAuth;
 import com.maria.gallery.mvp.model.entity.Image;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.view.View.Y;
 
 
 public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
@@ -73,6 +83,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
 
         ImageView imgView;
 
+
         ViewHolder(View itemView) {
             super(itemView);
 
@@ -82,6 +93,22 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
 
         void bindData(final Image image) {
             if (!badFile(image)) {
+                /*Glide.with(itemView.getContext()).asBitmap()
+                        .load(new GlideUrl(image.getPreviewDownloadLink(),
+                                        new LazyHeaders.Builder()
+                                                .addHeader("Authorization", "OAuth " + OAuth.getToken())
+                                                .build()
+                                )
+                        )
+                        .apply(RequestOptions.placeholderOf(R.drawable.image_24).centerCrop())
+                        .into(new SimpleTarget<Bitmap>() {
+                            @Override
+                            public void onResourceReady(@NonNull Bitmap bitmap, Transition<? super Bitmap> transition) {
+                                imgView.setImage(ImageSource.bitmap(bitmap));
+                            }
+                        });*/
+
+
                 Glide.with(itemView.getContext())
                         .load(new GlideUrl(image.getPreviewDownloadLink(),
                                         new LazyHeaders.Builder()
@@ -105,7 +132,6 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
         private boolean badFile(Image image) {
             return image.getPreviewDownloadLink() == null;
         }
-
 
         @Override
         public void onClick(View v) {

@@ -121,7 +121,7 @@ public class GalleryActivity extends MvpAppCompatActivity
     }
 
     @Override
-    public void startYandexAuthActivity(Intent intent) {
+    public void startYandexAuth(Intent intent) {
         startActivityForResult(intent, REQUEST_LOGIN_SDK);
     }
 

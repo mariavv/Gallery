@@ -2,14 +2,16 @@ package com.maria.gallery.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
+import com.davemorrissey.labs.subscaleview.ImageSource;
+import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.maria.gallery.R;
 import com.maria.gallery.mvp.present.ShowImagePresenter;
 import com.maria.gallery.mvp.view.ShowImageView;
@@ -21,7 +23,7 @@ public class ShowImageActivity extends MvpAppCompatActivity implements ShowImage
     @InjectPresenter
     ShowImagePresenter presenter;
 
-    ImageView image;
+    SubsamplingScaleImageView image;
     ProgressBar progressBar;
 
     public static Intent createStartIntent(Context context, String fileDownloadLink) {
@@ -51,7 +53,7 @@ public class ShowImageActivity extends MvpAppCompatActivity implements ShowImage
     public void showImage() {
         progressBar.setVisibility(View.VISIBLE);
 
-        presenter.getImage(this, image, getIntent().getStringExtra(ARG_FILE_DOWNLOAD_LINK));
+        presenter.getImage(this, getIntent().getStringExtra(ARG_FILE_DOWNLOAD_LINK));
     }
 
     @Override
@@ -62,8 +64,22 @@ public class ShowImageActivity extends MvpAppCompatActivity implements ShowImage
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
     public void stopProgressBar() {
         progressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onLoadEror() {
+        setImage(ImageSource.resource(R.drawable.error_24));
+    }
+
+    @Override
+    public void onLoadSuccsess(Bitmap bitmap) {
+        setImage(ImageSource.bitmap(bitmap));
+    }
+
+    private void setImage(ImageSource source) {
+        stopProgressBar();
+        image.setImage(source);
     }
 }

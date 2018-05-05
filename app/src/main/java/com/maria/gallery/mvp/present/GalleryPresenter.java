@@ -49,7 +49,7 @@ public class GalleryPresenter extends MvpPresenter<GalleryView> {
         String token = SaveDataHelper.getToken(context);
         if ((token == null) || (token.length() == 0)) {
             sdk = new YandexAuthSdk(new YandexAuthOptions(context, true));
-            getViewState().startYandexAuthActivity(sdk.createLoginIntent(context, null));
+            getViewState().startYandexAuth(sdk.createLoginIntent(context, null));
         } else {
             onHaveToken(token);
         }
