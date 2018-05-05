@@ -21,8 +21,6 @@ import io.reactivex.schedulers.Schedulers;
 @InjectViewState
 public class GalleryPresenter extends MvpPresenter<GalleryView> {
 
-    private static final int REQUEST_LOGIN_SDK = 2;
-
     private YandexAuthSdk sdk;
 
     @SuppressLint("CheckResult")
@@ -31,7 +29,13 @@ public class GalleryPresenter extends MvpPresenter<GalleryView> {
         feedRepo.getFeed()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(getViewState()::fillFeed, getViewState()::errorGetFeed);
+                /*.subscribe(images -> {
+                            getViewState().fillFeed(images);
+                        }, throwable -> {
+                            getViewState().errorGetFeed(throwable);
+                        }
+                );*/
+        .subscribe(getViewState()::fillFeed, getViewState()::errorGetFeed);
     }
 
     /*@Override
@@ -45,17 +49,14 @@ public class GalleryPresenter extends MvpPresenter<GalleryView> {
         String token = SaveDataHelper.getToken(context);
         if ((token == null) || (token.length() == 0)) {
             sdk = new YandexAuthSdk(new YandexAuthOptions(context, true));
-            getViewState().startYandexAuthActivity(sdk.createLoginIntent(context, null), REQUEST_LOGIN_SDK);
+            getViewState().startYandexAuthActivity(sdk.createLoginIntent(context, null));
         } else {
             onHaveToken(token);
         }
     }
 
-    public void activityResult(Context context, int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_LOGIN_SDK) {
+    public void activityResult(Context context, int resultCode, Intent data) {
             onLogin(context, resultCode, data);
-        }
-
     }
 
     private void onLogin(Context context, int resultCode, Intent data) {

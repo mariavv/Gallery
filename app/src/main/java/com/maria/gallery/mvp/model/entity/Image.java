@@ -7,7 +7,6 @@ import com.google.gson.annotations.SerializedName;
 public class Image {
 
     @NonNull
-    //@PrimaryKey
     @SerializedName("sha256")
     private String id = "";
 

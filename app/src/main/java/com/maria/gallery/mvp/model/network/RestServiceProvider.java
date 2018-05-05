@@ -1,5 +1,12 @@
 package com.maria.gallery.mvp.model.network;
 
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+import com.maria.gallery.mvp.model.entity.Image;
+import com.maria.gallery.mvp.model.repository.GalleryJsonDeserializer;
+
+import java.util.List;
+
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -35,7 +42,9 @@ public class RestServiceProvider {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(RestService.API_URL)
                 .client(provideClient())
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(/*new GsonBuilder()
+                        .registerTypeAdapter(new TypeToken<List<Image>>(){}.getType(),
+                                new GalleryJsonDeserializer()).create()*/))
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
         return retrofit.create(RestService.class);

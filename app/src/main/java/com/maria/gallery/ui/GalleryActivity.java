@@ -23,6 +23,8 @@ import java.util.List;
 public class GalleryActivity extends MvpAppCompatActivity
         implements GalleryView, FeedAdapter.OnItemClickListener {
 
+    private static final int REQUEST_LOGIN_SDK = 1;
+
     private static final String KEY_TURN = "TURN";
 
     @InjectPresenter
@@ -56,6 +58,8 @@ public class GalleryActivity extends MvpAppCompatActivity
     }
 
     private void configureViews() {
+        //Resources.getDimensionPixelSize()
+
         progressBar = findViewById(R.id.progressBar);
         progressBar.setVisibility(View.GONE);
 
@@ -74,11 +78,15 @@ public class GalleryActivity extends MvpAppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode != RESULT_OK) {
-            return;
-        }
+        if (requestCode == REQUEST_LOGIN_SDK) {
+            if (resultCode == RESULT_CANCELED) {
+                finish();
+            }
 
-        presenter.activityResult(this, requestCode, resultCode, data);
+            if (resultCode == RESULT_OK) {
+                presenter.activityResult(this, resultCode, data);
+            }
+        }
     }
 
     @Override
@@ -113,8 +121,8 @@ public class GalleryActivity extends MvpAppCompatActivity
     }
 
     @Override
-    public void startYandexAuthActivity(Intent intent, int request) {
-        startActivityForResult(intent, request);
+    public void startYandexAuthActivity(Intent intent) {
+        startActivityForResult(intent, REQUEST_LOGIN_SDK);
     }
 
     @Override

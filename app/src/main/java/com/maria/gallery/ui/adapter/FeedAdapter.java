@@ -77,15 +77,13 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
             super(itemView);
 
             imgView = itemView.findViewById(R.id.imgView);
-
             imgView.setOnClickListener(this);
         }
 
         void bindData(final Image image) {
-            String preview = image.getPreviewDownloadLink();
-            if (preview != null) {
+            if (!badFile(image)) {
                 Glide.with(itemView.getContext())
-                        .load(new GlideUrl(preview,
+                        .load(new GlideUrl(image.getPreviewDownloadLink(),
                                         new LazyHeaders.Builder()
                                                 .addHeader("Authorization", "OAuth " + OAuth.getToken())
                                                 .build()
@@ -93,15 +91,19 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
                         )
                         .apply(RequestOptions.placeholderOf(R.drawable.image_24).centerCrop())
                         .into(imgView);
+
+                imgView.setClickable(true);
             } else {
-            /*
-            Если файл порченный
-             */
-                Glide.with(itemView.getContext())
-                        .load("")
-                        .apply(RequestOptions.placeholderOf(R.drawable.image_24).centerCrop())
-                        .into(imgView);
+                /*
+                Если файл порченный
+                 */
+                imgView.setImageResource(R.drawable.error_24);
+                imgView.setClickable(false);
             }
+        }
+
+        private boolean badFile(Image image) {
+            return image.getPreviewDownloadLink() == null;
         }
 
 

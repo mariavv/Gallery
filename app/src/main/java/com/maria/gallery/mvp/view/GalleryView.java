@@ -12,7 +12,7 @@ public interface GalleryView extends MvpView {
 
     void fillFeed(List<Image> images);
 
-    void startYandexAuthActivity(Intent intent, int request);
+    void startYandexAuthActivity(Intent intent);
 
     void showFeed();
 

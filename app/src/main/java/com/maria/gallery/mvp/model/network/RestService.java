@@ -1,14 +1,12 @@
 package com.maria.gallery.mvp.model.network;
 
 
-import android.graphics.drawable.Drawable;
 
 import com.maria.gallery.mvp.model.entity.Image;
 
 import java.util.List;
 
 import io.reactivex.Observable;
-import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 
