@@ -5,6 +5,5 @@
     <string name="activity_view_image_viewImage">Просмотр</string>
     <string name="action_sync">Обновить</string>
     <string name="action_logout">Выйти</string>
-    <string name="action_auth">Авторизация</string>
-    <string name="message_get_auth">Авторизуйтесь в приложении</string>
+    <string name="message_get_auth">Не удалось авторизоваться</string>
 </resources>
