@@ -6,6 +6,7 @@ import android.content.Intent;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
+import com.maria.gallery.R;
 import com.maria.gallery.mvp.model.repository.FeedRepo;
 import com.maria.gallery.mvp.model.network.OAuth;
 import com.maria.gallery.mvp.view.GalleryView;
@@ -55,7 +56,7 @@ public class GalleryPresenter extends MvpPresenter<GalleryView> {
             final YandexAuthToken yandexAuthToken = sdk.extractToken(resultCode, data);
             if (yandexAuthToken != null) {
                 String token = yandexAuthToken.getValue();
-                SaveDataHelper.saveToken(token, context);
+                saveToken(token, context);
 
                 onHaveToken(token);
             }
@@ -68,5 +69,23 @@ public class GalleryPresenter extends MvpPresenter<GalleryView> {
     private void onHaveToken(String token) {
         OAuth.setToken(token);
         getViewState().showFeed();
+    }
+
+    public void sync() {
+        if (OAuth.getToken().length() > 0) {
+            getViewState().showFeed();
+        } else {
+            getViewState().showMessage(R.string.message_get_auth);
+        }
+    }
+
+    public void saveToken(String token, Context context) {
+        SaveDataHelper.saveToken(token, context);
+    }
+
+    public void authCanceled() {
+        if (OAuth.getToken().length() == 0) {
+            getViewState().finish();
+        }
     }
 }

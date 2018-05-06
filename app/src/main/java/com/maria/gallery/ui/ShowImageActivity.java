@@ -53,7 +53,6 @@ public class ShowImageActivity extends AppCompatActivity implements ShowImageVie
 
     public void showImage() {
         progressBar.setVisibility(View.VISIBLE);
-
         presenter.getImage(this, getIntent().getStringExtra(ARG_FILE_DOWNLOAD_LINK));
     }
 

@@ -1,6 +1,7 @@
 package com.maria.gallery.ui;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,14 +15,11 @@ import android.widget.Toast;
 import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.maria.gallery.R;
-import com.maria.gallery.mvp.model.network.OAuth;
-import com.maria.gallery.tool.SaveDataHelper;
 import com.maria.gallery.ui.adapter.FeedAdapter;
 import com.maria.gallery.mvp.model.entity.Image;
 import com.maria.gallery.mvp.present.GalleryPresenter;
 import com.maria.gallery.mvp.view.GalleryView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class GalleryActivity extends MvpAppCompatActivity
@@ -30,16 +28,15 @@ public class GalleryActivity extends MvpAppCompatActivity
     private static final int REQUEST_LOGIN_SDK = 1;
 
     private static final String KEY_TURN = "turn";
-
-    private static final Boolean DEFOULT = false;
+    private static final Boolean DEFAULT_TURN = false;
 
     @InjectPresenter
     GalleryPresenter presenter;
 
-    ProgressBar progressBar;
+    private ProgressBar progressBar;
 
-    RecyclerView recycler;
-    FeedAdapter adapter;
+    private RecyclerView recycler;
+    private FeedAdapter adapter;
 
     /*
     признак пересоздания активити
@@ -89,7 +86,11 @@ public class GalleryActivity extends MvpAppCompatActivity
     private void configureRecyclerView() {
         adapter = new FeedAdapter(this);
         recycler.setAdapter(adapter);
-        recycler.setLayoutManager(new GridLayoutManager(this, 2));
+        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            recycler.setLayoutManager(new GridLayoutManager(this, 4));
+        } else {
+            recycler.setLayoutManager(new GridLayoutManager(this, 2));
+        }
     }
 
     @Override
@@ -98,9 +99,7 @@ public class GalleryActivity extends MvpAppCompatActivity
 
         if (requestCode == REQUEST_LOGIN_SDK) {
             if (resultCode == RESULT_CANCELED) {
-                if (OAuth.getToken().length() == 0) {
-                    finish();
-                }
+                presenter.authCanceled();
             }
 
             if (resultCode == RESULT_OK) {
@@ -115,21 +114,12 @@ public class GalleryActivity extends MvpAppCompatActivity
 
         switch (id) {
             case R.id.sync:
-                if (OAuth.getToken().length() > 0) {
-                    showFeed();
-                } else {
-                    showMessage(getString(R.string.message_get_auth));
-                }
-
-                return true;
-            case R.id.auth:
-                presenter.auth(this);
+                presenter.sync();
 
                 return true;
             case R.id.logout:
-                SaveDataHelper.saveToken(null, this);
-                OAuth.setToken("");
-                fillFeed(new ArrayList<>());
+                presenter.saveToken(null, this);
+                finish();
 
                 return true;
             default:
@@ -139,21 +129,26 @@ public class GalleryActivity extends MvpAppCompatActivity
 
     @Override
     public void showFeed() {
-        progressBar.setVisibility(View.VISIBLE);
         /*
         Если метод вызвался не в результате пересоздания активити, то загружаем ленту,
         если активити была пересоздана, то сбрасываем флаг
          */
         if (!turn) {
+            progressBar.setVisibility(View.VISIBLE);
             presenter.loadFeed();
         } else {
-            turn = DEFOULT;
+            turn = DEFAULT_TURN;
         }
     }
 
     @Override
     public void showMessage(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showMessage(int messageRes) {
+        showMessage(getString(messageRes));
     }
 
     @Override
@@ -164,7 +159,11 @@ public class GalleryActivity extends MvpAppCompatActivity
 
     @Override
     public void startYandexAuth(Intent intent) {
-        startActivityForResult(intent, REQUEST_LOGIN_SDK);
+        if (!turn) {
+            startActivityForResult(intent, REQUEST_LOGIN_SDK);
+        } else {
+            turn = DEFAULT_TURN;
+        }
     }
 
     @Override
