@@ -7,9 +7,6 @@ public class OAuth {
         if (token == null) {
             return;
         }
-        if (token.equals("")) {
-            return;
-        }
         OAuth.token = token;
     }
 

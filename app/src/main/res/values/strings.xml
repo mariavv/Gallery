@@ -3,5 +3,8 @@
     <string name="gallery_name">Галерея</string>
     <string name="open_image">Открыть</string>
     <string name="activity_view_image_viewImage">Просмотр</string>
-    <string name="sync">Обновить</string>
+    <string name="action_sync">Обновить</string>
+    <string name="action_logout">Выйти</string>
+    <string name="action_auth">Авторизация</string>
+    <string name="message_get_auth">Авторизуйтесь в приложении</string>
 </resources>

@@ -35,11 +35,15 @@ public class GalleryPresenter extends MvpPresenter<GalleryView> {
     public void login(Context context) {
         String token = SaveDataHelper.getToken(context);
         if ((token == null) || (token.length() == 0)) {
-            sdk = new YandexAuthSdk(new YandexAuthOptions(context, true));
-            getViewState().startYandexAuth(sdk.createLoginIntent(context, null));
+            auth(context);
         } else {
             onHaveToken(token);
         }
+    }
+
+    public void auth(Context context) {
+        sdk = new YandexAuthSdk(new YandexAuthOptions(context, true));
+        getViewState().startYandexAuth(sdk.createLoginIntent(context, null));
     }
 
     public void activityResult(Context context, int resultCode, Intent data) {

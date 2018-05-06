@@ -14,11 +14,14 @@ import android.widget.Toast;
 import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.maria.gallery.R;
+import com.maria.gallery.mvp.model.network.OAuth;
+import com.maria.gallery.tool.SaveDataHelper;
 import com.maria.gallery.ui.adapter.FeedAdapter;
 import com.maria.gallery.mvp.model.entity.Image;
 import com.maria.gallery.mvp.present.GalleryPresenter;
 import com.maria.gallery.mvp.view.GalleryView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GalleryActivity extends MvpAppCompatActivity
@@ -26,7 +29,9 @@ public class GalleryActivity extends MvpAppCompatActivity
 
     private static final int REQUEST_LOGIN_SDK = 1;
 
-    private static final String KEY_TURN = "TURN";
+    private static final String KEY_TURN = "turn";
+
+    private static final Boolean DEFOULT = false;
 
     @InjectPresenter
     GalleryPresenter presenter;
@@ -36,6 +41,9 @@ public class GalleryActivity extends MvpAppCompatActivity
     RecyclerView recycler;
     FeedAdapter adapter;
 
+    /*
+    признак пересоздания активити
+     */
     private Boolean turn;
 
     @Override
@@ -47,7 +55,9 @@ public class GalleryActivity extends MvpAppCompatActivity
 
         configureViews();
 
-        presenter.login(this);
+        if (!turn) {
+            presenter.login(this);
+        }
     }
 
     @Override
@@ -79,7 +89,6 @@ public class GalleryActivity extends MvpAppCompatActivity
     private void configureRecyclerView() {
         adapter = new FeedAdapter(this);
         recycler.setAdapter(adapter);
-
         recycler.setLayoutManager(new GridLayoutManager(this, 2));
     }
 
@@ -89,7 +98,9 @@ public class GalleryActivity extends MvpAppCompatActivity
 
         if (requestCode == REQUEST_LOGIN_SDK) {
             if (resultCode == RESULT_CANCELED) {
-                finish();
+                if (OAuth.getToken().length() == 0) {
+                    finish();
+                }
             }
 
             if (resultCode == RESULT_OK) {
@@ -100,18 +111,43 @@ public class GalleryActivity extends MvpAppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.sync) {
-            showFeed();
+        int id = item.getItemId();
+
+        switch (id) {
+            case R.id.sync:
+                if (OAuth.getToken().length() > 0) {
+                    showFeed();
+                } else {
+                    showMessage(getString(R.string.message_get_auth));
+                }
+
+                return true;
+            case R.id.auth:
+                presenter.auth(this);
+
+                return true;
+            case R.id.logout:
+                SaveDataHelper.saveToken(null, this);
+                OAuth.setToken("");
+                fillFeed(new ArrayList<>());
+
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void showFeed() {
         progressBar.setVisibility(View.VISIBLE);
-
+        /*
+        Если метод вызвался не в результате пересоздания активити, то загружаем ленту,
+        если активити была пересоздана, то сбрасываем флаг
+         */
         if (!turn) {
             presenter.loadFeed();
+        } else {
+            turn = DEFOULT;
         }
     }
 
@@ -122,8 +158,8 @@ public class GalleryActivity extends MvpAppCompatActivity
 
     @Override
     public void fillFeed(List<Image> images) {
-        progressBar.setVisibility(View.GONE);
         adapter.updateItems(images);
+        progressBar.setVisibility(View.GONE);
     }
 
     @Override
@@ -147,8 +183,6 @@ public class GalleryActivity extends MvpAppCompatActivity
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        if (!turn) {
-            outState.putBoolean(KEY_TURN, true);
-        }
+        outState.putBoolean(KEY_TURN, true);
     }
 }
