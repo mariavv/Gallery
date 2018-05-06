@@ -29,21 +29,8 @@ public class GalleryPresenter extends MvpPresenter<GalleryView> {
         feedRepo.getFeed()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                /*.subscribe(images -> {
-                            getViewState().fillFeed(images);
-                        }, throwable -> {
-                            getViewState().errorGetFeed(throwable);
-                        }
-                );*/
-        .subscribe(getViewState()::fillFeed, getViewState()::errorGetFeed);
+                .subscribe(getViewState()::fillFeed, getViewState()::errorGetFeed);
     }
-
-    /*@Override
-    protected void onFirstViewAttach() {
-        int b = this.getAttachedViews().size();
-        super.onFirstViewAttach();
-        int gb = this.getAttachedViews().size();
-    }*/
 
     public void login(Context context) {
         String token = SaveDataHelper.getToken(context);
@@ -56,7 +43,7 @@ public class GalleryPresenter extends MvpPresenter<GalleryView> {
     }
 
     public void activityResult(Context context, int resultCode, Intent data) {
-            onLogin(context, resultCode, data);
+        onLogin(context, resultCode, data);
     }
 
     private void onLogin(Context context, int resultCode, Intent data) {

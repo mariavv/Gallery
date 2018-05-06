@@ -1,7 +1,5 @@
 package com.maria.gallery.mvp.model.network;
 
-
-
 import com.maria.gallery.mvp.model.entity.Image;
 
 import java.util.List;

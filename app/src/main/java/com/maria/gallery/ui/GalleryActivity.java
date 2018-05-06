@@ -1,7 +1,6 @@
 package com.maria.gallery.ui;
 
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -38,7 +37,6 @@ public class GalleryActivity extends MvpAppCompatActivity
     FeedAdapter adapter;
 
     private Boolean turn;
-    //private int countViews;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +44,6 @@ public class GalleryActivity extends MvpAppCompatActivity
         setContentView(R.layout.activity_gallery);
 
         turn = savedInstanceState != null && savedInstanceState.getBoolean(KEY_TURN);
-        //countViews = 1;
 
         configureViews();
 
@@ -125,11 +122,8 @@ public class GalleryActivity extends MvpAppCompatActivity
 
     @Override
     public void fillFeed(List<Image> images) {
-        //if (countViews++ < 2) {
         progressBar.setVisibility(View.GONE);
-
         adapter.updateItems(images);
-        //}
     }
 
     @Override
@@ -140,15 +134,6 @@ public class GalleryActivity extends MvpAppCompatActivity
     @Override
     public void errorGetFeed(Throwable throwable) {
         progressBar.setVisibility(View.GONE);
-
-        /*String err = throwable.getCause().getMessage();
-        String mess = "";
-        if (err.contains("UNAUTHORIZED")) {
-            mess = "Не авторизован";
-        } else if (err.contains("Timeout")) {
-            mess = "Превышено время ожидания";
-        }*/
-
         showMessage(throwable.getMessage());
     }
 

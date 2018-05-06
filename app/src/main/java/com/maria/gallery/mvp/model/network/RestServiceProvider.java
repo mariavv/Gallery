@@ -35,9 +35,7 @@ public class RestServiceProvider {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(RestService.API_URL)
                 .client(provideClient())
-                .addConverterFactory(GsonConverterFactory.create(/*new GsonBuilder()
-                        .registerTypeAdapter(new TypeToken<List<Image>>(){}.getType(),
-                                new GalleryJsonDeserializer()).create()*/))
+                .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
         return retrofit.create(RestService.class);
