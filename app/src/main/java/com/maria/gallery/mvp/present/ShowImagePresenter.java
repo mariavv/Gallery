@@ -5,8 +5,6 @@ import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.arellomobile.mvp.InjectViewState;
-import com.arellomobile.mvp.MvpPresenter;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
@@ -17,8 +15,14 @@ import com.bumptech.glide.request.transition.Transition;
 
 import com.maria.gallery.mvp.view.ShowImageView;
 
-@InjectViewState
-public class ShowImagePresenter extends MvpPresenter<ShowImageView> {
+public class ShowImagePresenter {
+
+    private ShowImageView view;
+
+    public void attachView(ShowImageView view) {
+        this.view = view;
+    }
+
     public void getImage(Context context, String url) {
 
         Glide.with(context).asBitmap()
@@ -26,7 +30,7 @@ public class ShowImagePresenter extends MvpPresenter<ShowImageView> {
                 .listener(new RequestListener<Bitmap>() {
                     @Override
                     public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
-                        getViewState().onLoadEror();
+                        view.onLoadEror();
                         return false;
                     }
 
@@ -38,8 +42,12 @@ public class ShowImagePresenter extends MvpPresenter<ShowImageView> {
                 .into(new SimpleTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(@NonNull Bitmap bitmap, Transition<? super Bitmap> transition) {
-                        getViewState().onLoadSuccsess(bitmap);
+                        view.onLoadSuccsess(bitmap);
                     }
                 });
+    }
+
+    public void detachView() {
+        view = null;
     }
 }

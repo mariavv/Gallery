@@ -4,45 +4,25 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 
-import com.arellomobile.mvp.MvpAppCompatActivity;
-import com.arellomobile.mvp.presenter.InjectPresenter;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.SimpleTarget;
-import com.bumptech.glide.request.target.Target;
-import com.bumptech.glide.request.transition.Transition;
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.maria.gallery.R;
 import com.maria.gallery.mvp.present.ShowImagePresenter;
 import com.maria.gallery.mvp.view.ShowImageView;
 
-public class ShowImageActivity extends MvpAppCompatActivity implements ShowImageView {
+public class ShowImageActivity extends AppCompatActivity implements ShowImageView {
 
     public static final String ARG_FILE_DOWNLOAD_LINK = "fileDownloadLink";
 
-    private static final String KEY_TURN = "turn";
+    private ShowImagePresenter presenter;
 
-    private static final Boolean DEFOULT = false;
-
-    @InjectPresenter
-    ShowImagePresenter presenter;
-
-    SubsamplingScaleImageView image;
-    ProgressBar progressBar;
-
-    /*
-    признак пересоздания активити
-    */
-    private Boolean turn;
+    private SubsamplingScaleImageView image;
+    private ProgressBar progressBar;
 
     public static Intent createStartIntent(Context context, String fileDownloadLink) {
         Intent intent = new Intent(context, ShowImageActivity.class);
@@ -57,12 +37,13 @@ public class ShowImageActivity extends MvpAppCompatActivity implements ShowImage
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_image);
 
-        turn = savedInstanceState != null && savedInstanceState.getBoolean(KEY_TURN);
-
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
+
+        presenter = new ShowImagePresenter();
+        presenter.attachView(this);
 
         image = findViewById(R.id.image);
         progressBar = findViewById(R.id.imgProgressBar);
@@ -100,17 +81,12 @@ public class ShowImageActivity extends MvpAppCompatActivity implements ShowImage
 
     private void setImage(ImageSource source) {
         stopProgressBar();
-        if (!turn) {
             image.setImage(source);
-        } else {
-            turn = DEFOULT;
-        }
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-        outState.putBoolean(KEY_TURN, true);
+    public void onDestroy() {
+        presenter.detachView();
+        super.onDestroy();
     }
 }

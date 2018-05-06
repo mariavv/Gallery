@@ -3,4 +3,5 @@
     <color name="colorPrimaryDark">#282828</color>
     <color name="colorImageBackground">#121212</color>
     <color name="colorAccent">#40d9ff</color>
+    <color name="feed_background">#52e8ebec</color>
 </resources>
